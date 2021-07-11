@@ -74,7 +74,7 @@ For better Authentication we are using both server jwt tokens and Firebase JWT t
 
 ---
 
-##TechStack
+##Tech Stack
 We are using the below tech stack.
 - Mongo For Database
 - Express for routing
