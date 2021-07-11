@@ -2,13 +2,12 @@
 
 const express = require("express");
 
-const middleware = require("../middlewares/index");
-const issueType = require("../../models/issueType");
-const userData = require("../../models/users");
+const middleware = require("../../middlewares");
+const issueType = require("../../database/models/issueType");
+const userData = require("../../database/models/users");
 
 const adminActionRouter = express.Router();
 
-// eslint-disable-next-line consistent-return
 adminActionRouter.patch(
   "/create-admin",
   middleware.authenticateJWT,

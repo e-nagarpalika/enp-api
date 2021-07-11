@@ -1,12 +1,11 @@
 /** @format */
 
-const mongoose = require("../database/init");
+const mongoose = require("../init");
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: false,
       lowercase: false,
       trim: false,
     },
@@ -49,7 +48,13 @@ const userSchema = new mongoose.Schema(
       required: false,
     },
   },
-  { collection: "users" },
+  {
+    collection: "users",
+    timestamps: {
+      createdAt: "createdAt",
+      updatedAt: "updatedAt",
+    },
+  },
 );
 
 module.exports = mongoose.model("user", userSchema);

@@ -5,14 +5,16 @@ const admin = require("./firebase");
 
 class Middleware {
   // eslint-disable-next-line class-methods-use-this,consistent-return
-  async decodeToken(req, res, next) {
+  async decodeFirebaseToken(req, res, next) {
     if (
       req.headers !== "Bearer null" &&
       req.headers?.authorization?.startsWith("Bearer ")
     ) {
       const token = req.headers.authorization.split(" ")[1];
+
       try {
         const decodedToken = await admin.auth().verifyIdToken(token);
+
         req.currentUser = decodedToken;
         // eslint-disable-next-line no-console
         // console.log(decodedToken);
