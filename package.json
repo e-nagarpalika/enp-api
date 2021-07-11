@@ -28,7 +28,8 @@
   },
   "homepage": "https://github.com/pesto-students/n4-e-nagarpalika-backend-eta-4#readme",
   "engines": {
-    "node": "14"
+    "node": ">=14.0.0",
+    "npm": ">=7.0.0"
   },
   "dependencies": {
     "cookie-parser": "1.4.5",
