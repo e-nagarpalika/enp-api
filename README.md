@@ -1,13 +1,13 @@
 # N4-E-Nagarpalika-Backend
 
-A nice project with a nice description
+`e-NagarPalika` app is created with the sole intention of helping people log, track and resolve their grievances effectively. For a detailed overview of our project please find the required artifacts in the [google drive](https://drive.google.com/drive/folders/1m65N-1Ti4YkbAydtNGISgpeh_c-oXefx).
 
 ---
 ## Requirements
 
 For development, you will only need Node.js and a node global package, installed in your environement.
 
-### Node
+### Node(14 and above)
 - #### Node installation on Windows
 
   Just go on [official Node.js website](https://nodejs.org/) and download the installer.
@@ -26,10 +26,8 @@ For development, you will only need Node.js and a node global package, installed
 If the installation was successful, you should be able to run the following command.
 
     $ node --version
-    v8.11.3
 
     $ npm --version
-    6.1.0
 
 If you need to update `npm`, you can make it using `npm`! Cool right? After running the following command, just open again the command line and be happy.
 
@@ -46,15 +44,9 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 ## Configure app
 
-Create a `.env` file in the project then  add the required params. You will need:
+Create a `.env` file in the project root directory then  add the required params which you can get from `.env.sample`  file in the root diectory.
 
-- AUTH_SECRET= 
-- MONGODB_URI=
-- NODE_ENV=
-- PORT=
-- WEB_URI=
-
-create a data directory and add the firebase serviceAccount.json there
+Create a data directory and add the firebase serviceAccount.json there
 
 ## Running the project on dev for better debug
 
