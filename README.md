@@ -62,7 +62,7 @@ Create a data directory and add the firebase serviceAccount.json there
 ---
 ###
 ### Authentication 
-For better Authentication we are using both server jwt tokens and Firebase JWT tokens effectively.
+For better Authentication we are using both server jwt tokens and Firebase Auth tokens effectively.
 
 ---
 
