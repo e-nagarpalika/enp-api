@@ -191,7 +191,7 @@ router.get("/issues/:issueId", getIssueRoute);
 /**
  * @swagger
  * /api/admin/user:
- *   get:
+ *   post:
  *     summary: get user by phone number
  *     description: get user by phone number
  *     tags:
@@ -206,7 +206,7 @@ router.get("/issues/:issueId", getIssueRoute);
  *       200:
  *         description: return user information if exists otherwise "false".
  */
-router.get("/admin/user", getUserByPhoneNumberRoute);
+router.post("/admin/user", getUserByPhoneNumberRoute);
 
 /**
  * @swagger
