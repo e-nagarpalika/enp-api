@@ -2,7 +2,7 @@
 
 const jwt = require("jsonwebtoken");
 
-const userData = require("../../database/models/users");
+const userModel = require("../users/model");
 
 const { ACCESS_TOKEN_SECRET } = process.env;
 
@@ -15,7 +15,7 @@ const login = async (req, res) => {
   }
 
   try {
-    const user = await userData.findOne({ phoneNumber });
+    const user = await userModel.findOne({ phoneNumber });
 
     const accessToken = jwt.sign(
       {

@@ -1,8 +1,6 @@
 /** @format */
 
-require("dotenv").config();
-
-const { PORT, WEB_URI } = process.env;
+const { WEB_URI } = process.env;
 
 const express = require("express");
 const cors = require("cors");
@@ -25,16 +23,16 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 const app = express();
 
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
-
 app.use(cors({ origin: WEB_URI }));
 app.use(cookieParser());
 app.use(express.json());
 // app.use(middleware.decodeToken);
 
-app.use("/api", routes);
-
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server listening at http://localhost:${PORT}`);
+app.get("/", (_req, res) => {
+  res.status(200).send("Hello World!");
 });
+
+app.use("/api", routes);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
+module.exports = app;

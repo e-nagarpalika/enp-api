@@ -2,7 +2,7 @@
 
 const jwt = require("jsonwebtoken");
 
-const userData = require("../../database/models/users");
+const userModel = require("../users/model");
 
 const { ACCESS_TOKEN_SECRET } = process.env;
 
@@ -18,7 +18,7 @@ const register = async (req, res) => {
   }
 
   // eslint-disable-next-line new-cap
-  const user = new userData(req.body);
+  const user = new userModel(req.body);
   // eslint-disable-next-line consistent-return
   return user.save((err) => {
     if (err && err.code !== 11000) {

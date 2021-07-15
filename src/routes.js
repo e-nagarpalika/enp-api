@@ -6,8 +6,23 @@ const router = express.Router();
 
 // const middleware = require("./middlewares/index");
 
+const createAdminCommentRoute = require("./modules/grievances/createAdminComment");
+const createCommentRoute = require("./modules/grievances/createComment");
+const createIssueRoute = require("./modules/grievances/createIssue");
+const createIssueTypeRoute = require("./modules/grievances/createIssueType");
+const deleteAdminCommentRoute = require("./modules/grievances/deleteAdminComment");
+const getAdminCommentsRoute = require("./modules/grievances/getAdminComments");
+const getAdminIssueRoute = require("./modules/grievances/getAdminIssue");
+const getAdminIssuesRoute = require("./modules/grievances/getAdminIssues");
+const getCommentsRoute = require("./modules/grievances/getComments");
+const getIssueRoute = require("./modules/grievances/getIssue");
+const getIssueTypesRoute = require("./modules/grievances/getIssueTypes");
+const getUserByPhoneNumberRoute = require("./modules/users/getUserByPhoneNumber");
+const getUserIssuesRoute = require("./modules/grievances/getUserIssues");
 const loginRoute = require("./modules/auth/login");
 const registerRoute = require("./modules/auth/register");
+const updateAccountRoute = require("./modules/users/updateAccount");
+const updateUserTypeRoute = require("./modules/users/updateUserType");
 
 /**
  * @swagger
@@ -73,7 +88,7 @@ router.put("/register", registerRoute);
  *       200:
  *         description: user information is updated
  */
-router.put("/users/:userId", registerRoute);
+router.put("/users/:userId", updateAccountRoute);
 
 /**
  * @swagger
@@ -94,7 +109,7 @@ router.put("/users/:userId", registerRoute);
  *       200:
  *         description: list of all the issues created by user with :userId
  */
-router.get("/users/:userId/issues", registerRoute);
+router.get("/users/:userId/issues", getUserIssuesRoute);
 
 /**
  * @swagger
@@ -114,7 +129,7 @@ router.get("/users/:userId/issues", registerRoute);
  *       200:
  *         description:
  */
-router.post("/users/:userId/issues", registerRoute);
+router.post("/users/:userId/issues", createIssueRoute);
 
 /**
  * @swagger
@@ -135,7 +150,7 @@ router.post("/users/:userId/issues", registerRoute);
  *       200:
  *         description: Signed In
  */
-router.post("/users/:userId/issues/:issueId/comments", registerRoute);
+router.post("/users/:userId/issues/:issueId/comments", createCommentRoute);
 
 /**
  * @swagger
@@ -156,7 +171,7 @@ router.post("/users/:userId/issues/:issueId/comments", registerRoute);
  *       200:
  *         description: Signed In
  */
-router.get("/users/:userId/issues/:issueId/comments", registerRoute);
+router.get("/users/:userId/issues/:issueId/comments", getCommentsRoute);
 
 /**
  * @swagger
@@ -171,7 +186,7 @@ router.get("/users/:userId/issues/:issueId/comments", registerRoute);
  *       200:
  *         description: Signed In
  */
-router.get("/issues/:issueId", registerRoute);
+router.get("/issues/:issueId", getIssueRoute);
 
 /**
  * @swagger
@@ -191,7 +206,7 @@ router.get("/issues/:issueId", registerRoute);
  *       200:
  *         description: return user information if exists otherwise "false".
  */
-router.get("/admin/user", registerRoute);
+router.get("/admin/user", getUserByPhoneNumberRoute);
 
 /**
  * @swagger
@@ -216,13 +231,13 @@ router.get("/admin/user", registerRoute);
  *       200:
  *         description: true/false
  */
-router.put("/admin/user/:userId", registerRoute);
+router.put("/admin/user/:userId", updateUserTypeRoute);
 
 /**
  * @swagger
  * /api/admin/issues/issueType:
  *   post:
- *     description: create an issue
+ *     description: create an issue Type
  *     tags:
  *     - admins
  *     parameters:
@@ -235,7 +250,7 @@ router.put("/admin/user/:userId", registerRoute);
  *       201:
  *         description: true/false
  */
-router.post("/admin/issues/issueType", registerRoute);
+router.post("/admin/issues/issueType", createIssueTypeRoute);
 
 /**
  * @swagger
@@ -254,7 +269,7 @@ router.post("/admin/issues/issueType", registerRoute);
  *       201:
  *         description: true/false
  */
-router.get("/admin/issues/issueType", registerRoute);
+router.get("/admin/issues/issueType", getIssueTypesRoute);
 
 /**
  * @swagger
@@ -273,7 +288,7 @@ router.get("/admin/issues/issueType", registerRoute);
  *       200:
  *         description: true/false
  */
-router.get("/admin/issues", registerRoute);
+router.get("/admin/issues", getAdminIssuesRoute);
 
 /**
  * @swagger
@@ -292,7 +307,7 @@ router.get("/admin/issues", registerRoute);
  *       200:
  *         description: true/false
  */
-router.get("/admin/issues/:issueId", registerRoute);
+router.get("/admin/issues/:issueId", getAdminIssueRoute);
 
 /**
  * @swagger
@@ -311,7 +326,7 @@ router.get("/admin/issues/:issueId", registerRoute);
  *       200:
  *         description: true/false
  */
-router.get("/admin/issues/:issueId/comments", registerRoute);
+router.get("/admin/issues/:issueId/comments", getAdminCommentsRoute);
 
 /**
  * @swagger
@@ -331,7 +346,7 @@ router.get("/admin/issues/:issueId/comments", registerRoute);
  *       201:
  *         description: true/false
  */
-router.post("/admin/issues/:issueId/comments", registerRoute);
+router.post("/admin/issues/:issueId/comments", createAdminCommentRoute);
 
 /**
  * @swagger
@@ -352,6 +367,9 @@ router.post("/admin/issues/:issueId/comments", registerRoute);
  *       201:
  *         description: true/false
  */
-router.delete("/admin/issues/:issueId/comments/:commentId", registerRoute);
+router.delete(
+  "/admin/issues/:issueId/comments/:commentId",
+  deleteAdminCommentRoute,
+);
 
 module.exports = router;
