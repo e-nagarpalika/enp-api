@@ -66,22 +66,77 @@ describe("PUT /api/users/:userId", () => {
 });
 
 describe("GET /api/users/:userId/issues", () => {
-  test("It should response the GET method", (done) => {
+  beforeAll(async () => {
+    const newIssue = {
+      title: "This is Issue Title",
+      description: "This is Issue description",
+      images: [
+        "https://sample-url.com/of/image",
+        "https://sample-url.com/of/image",
+      ],
+    };
+
+    await Promise.all([
+      request(app)
+        .post("/api/users/60f07245837e0e980156e4a4/issues")
+        .send(newIssue),
+    ]);
+  });
+
+  test.only("Case: Success", (done) => {
     request(app)
-      .get("/")
+      .get("/api/users/60f07245837e0e980156e4a4/issues")
       .then((response) => {
         expect(response.statusCode).toBe(200);
+
+        expect(response.body).toMatchObject({
+          status: "Success",
+        });
+
+        expect(response.body.data.issues).toMatchSnapshot([
+          {
+            _id: expect.any(String),
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            __v: expect.any(Number),
+          },
+        ]);
+
         done();
       });
   });
 });
 
 describe("POST /api/users/:userId/issues", () => {
-  test("It should response the GET method", (done) => {
+  test("CASE: Success", (done) => {
+    const newIssue = {
+      title: "This is Issue Title",
+      description: "This is Issue description",
+      images: [
+        "https://sample-url.com/of/image",
+        "https://sample-url.com/of/image",
+      ],
+    };
+
     request(app)
-      .get("/")
+      .post("/api/users/60f07245837e0e980156e4a4/issues")
+      .send(newIssue)
       .then((response) => {
         expect(response.statusCode).toBe(200);
+
+        expect(response.body).toMatchObject({
+          status: "Success",
+        });
+
+        expect(response.body.data).toMatchObject({
+          issue: expect.objectContaining({
+            _id: expect.any(String),
+            title: expect.any(String),
+            description: expect.any(String),
+            images: expect.arrayContaining([expect.any(String)]),
+          }),
+        });
+
         done();
       });
   });
@@ -153,7 +208,7 @@ describe("GET /api/issues/:issueId", () => {
       });
   });
 
-  test.only("Case: Not Found", (done) => {
+  test("Case: Not Found", (done) => {
     request(app)
       .get(`/api/issues/60f07245837e0e980156e4a4`)
       .then((response) => {
@@ -235,12 +290,31 @@ describe("PUT /admin/user/:userId", () => {
   });
 });
 
-describe("POST /admin/issues/issueType", () => {
-  test("It should response the GET method", (done) => {
+describe("POST /api/admin/issues/issueType", () => {
+  test("CASE: Success", (done) => {
+    const newIssueTypeObj = {
+      name: "Traffic Light",
+      city: "delhi",
+    };
+
     request(app)
-      .get("/")
+      .post("/api/admin/issues/issueType")
+      .send(newIssueTypeObj)
       .then((response) => {
         expect(response.statusCode).toBe(200);
+
+        expect(response.body).toMatchObject({
+          status: "Success",
+        });
+
+        expect(response.body.data).toMatchObject({
+          issueType: expect.objectContaining({
+            _id: expect.any(String),
+            name: expect.any(String),
+            city: expect.toBeOneOf(["delhi", "bangaluru", "mumbai"]),
+          }),
+        });
+
         done();
       });
   });

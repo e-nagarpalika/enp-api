@@ -4,6 +4,10 @@ const { mongoose } = require("../../../database/mongoDB");
 
 const issueSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Types.ObjectId,
+      ref: "users",
+    },
     title: {
       type: String,
       required: true,

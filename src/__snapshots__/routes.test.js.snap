@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GET /api/users/:userId/issues Case: Success 1`] = `
+Array [
+  Object {
+    "__v": Any<Number>,
+    "_id": Any<String>,
+    "createdAt": Any<String>,
+    "description": "This is Issue description",
+    "images": Array [
+      "https://sample-url.com/of/image",
+      "https://sample-url.com/of/image",
+    ],
+    "title": "This is Issue Title",
+    "updatedAt": Any<String>,
+    "userId": "60f07245837e0e980156e4a4",
+  },
+]
+`;
