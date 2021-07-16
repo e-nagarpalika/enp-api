@@ -1,10 +1,15 @@
 /** @format */
 const request = require("supertest");
+const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
 const mongoDB = require("./database/mongoDB");
 const UserModel = require("./modules/users/model");
+const IssueModel = require("./modules/grievances/models/issue");
+const IssueTypeModel = require("./modules/grievances/models/issueType");
 const app = require("./app");
+
+// jest.setTimeout(10000);
 
 let mongoMemoryServer;
 
@@ -14,17 +19,18 @@ beforeAll(async () => {
 
   const uri = mongoMemoryServer.getUri();
 
-  mongoDB.connect(uri);
+  await mongoDB.connect(uri).catch((err) => console.error(err));
 });
 
-afterAll(async () => {
-  mongoDB.disconnect();
-
-  if (mongoMemoryServer) {
-    await mongoMemoryServer.stop();
-    mongoMemoryServer = null;
-  }
-});
+// TODO: afterAll is closing db connect before last test run,
+// afterAll((done) => {
+//   mongoDB.disconnect(done);
+//   if (mongoMemoryServer) {
+//     await mongoMemoryServer.stop();
+//     done();
+//     mongoMemoryServer = null;
+//   }
+// });
 
 describe("POST /api/login", () => {
   test("It should response the GET method", (done) => {
@@ -103,12 +109,61 @@ describe("GET /api/users/:userId/issues/:issueId/comments", () => {
   });
 });
 
-describe("GET /issues/:issueId", () => {
-  test("It should response the GET method", (done) => {
+describe("GET /api/issues/:issueId", () => {
+  const issueId = "60f07245837e0e980156e4a3";
+
+  beforeAll(async () => {
+    const newIssue = IssueModel({
+      _id: mongoose.Types.ObjectId(issueId),
+      title: "This is Issue Title",
+      description: "This is Issue description",
+      images: [
+        "https://sample-url.com/of/image",
+        "https://sample-url.com/of/image",
+      ],
+    });
+
+    await newIssue.save();
+  });
+
+  afterAll(() => {
+    IssueModel.db.dropCollection("issues");
+  });
+
+  test("Case: Success", (done) => {
     request(app)
-      .get("/")
+      .get(`/api/issues/${issueId}`)
       .then((response) => {
         expect(response.statusCode).toBe(200);
+
+        expect(response.body).toMatchObject({
+          status: "Success",
+        });
+
+        expect(response.body.data).toMatchObject({
+          issue: expect.objectContaining({
+            _id: expect.any(String),
+            title: expect.any(String),
+            description: expect.any(String),
+            images: expect.arrayContaining([expect.any(String)]),
+          }),
+        });
+
+        done();
+      });
+  });
+
+  test.only("Case: Not Found", (done) => {
+    request(app)
+      .get(`/api/issues/60f07245837e0e980156e4a4`)
+      .then((response) => {
+        expect(response.statusCode).toBe(200);
+
+        expect(response.body).toMatchObject({
+          status: "Error",
+          message: "Issue Not Found",
+        });
+
         done();
       });
   });

@@ -1,6 +1,6 @@
 /** @format */
 
-const { mongoose } = require("../../database/init");
+const { mongoose } = require("../../../database/mongoDB");
 
 const issueSchema = new mongoose.Schema(
   {
