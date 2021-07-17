@@ -1,5 +1,101 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GET /api/admin/issues Case: Success with auth ADMIN 1`] = `
+Object {
+  "__v": Any<Number>,
+  "_id": Any<String>,
+  "createdAt": Any<String>,
+  "description": "This is Issue description",
+  "images": Array [
+    "https://sample-url.com/of/image",
+    "https://sample-url.com/of/image",
+  ],
+  "title": "This is Issue Title",
+  "updatedAt": Any<String>,
+  "userId": "60f07245837e0e980156e4a4",
+}
+`;
+
+exports[`GET /api/admin/issues Case: Success with auth ADMIN 2`] = `
+Object {
+  "__v": Any<Number>,
+  "_id": Any<String>,
+  "createdAt": Any<String>,
+  "description": "This is Issue description",
+  "images": Array [
+    "https://sample-url.com/of/image",
+    "https://sample-url.com/of/image",
+  ],
+  "title": "This is Issue Title",
+  "updatedAt": Any<String>,
+  "userId": "60f07245837e0e980156e4a4",
+}
+`;
+
+exports[`GET /api/admin/issues Case: Success with auth ADMIN 3`] = `
+Object {
+  "__v": Any<Number>,
+  "_id": Any<String>,
+  "createdAt": Any<String>,
+  "description": "This is Issue description",
+  "images": Array [
+    "https://sample-url.com/of/image",
+    "https://sample-url.com/of/image",
+  ],
+  "title": "This is Issue Title",
+  "updatedAt": Any<String>,
+  "userId": "60f07245837e0e980156e4a4",
+}
+`;
+
+exports[`GET /api/admin/issues/issueType Case: Success 1`] = `
+Object {
+  "__v": Any<Number>,
+  "_id": Any<String>,
+  "city": "delhi",
+  "createdAt": Any<String>,
+  "isDisabled": false,
+  "name": "Traffic Light",
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`GET /api/admin/issues/issueType Case: Success 2`] = `
+Object {
+  "__v": Any<Number>,
+  "_id": Any<String>,
+  "city": "delhi",
+  "createdAt": Any<String>,
+  "isDisabled": false,
+  "name": "Traffic Light",
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`GET /api/admin/issues/issueType Case: Success 3`] = `
+Object {
+  "__v": Any<Number>,
+  "_id": Any<String>,
+  "city": "mumbai",
+  "createdAt": Any<String>,
+  "isDisabled": false,
+  "name": "Pollution",
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`GET /api/admin/issues/issueType Case: Success 4`] = `
+Object {
+  "__v": Any<Number>,
+  "_id": Any<String>,
+  "city": "bangaluru",
+  "createdAt": Any<String>,
+  "isDisabled": false,
+  "name": "Water Issue",
+  "updatedAt": Any<String>,
+}
+`;
+
 exports[`GET /api/users/:userId/issues Case: Success 1`] = `
 Array [
   Object {

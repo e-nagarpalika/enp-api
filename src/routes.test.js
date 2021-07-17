@@ -83,7 +83,7 @@ describe("GET /api/users/:userId/issues", () => {
     ]);
   });
 
-  test.only("Case: Success", (done) => {
+  test("Case: Success", (done) => {
     request(app)
       .get("/api/users/60f07245837e0e980156e4a4/issues")
       .then((response) => {
@@ -143,11 +143,41 @@ describe("POST /api/users/:userId/issues", () => {
 });
 
 describe("POST /api/users/:userId/issues/:issueId/comments", () => {
-  test("It should response the GET method", (done) => {
+  let issueId;
+  const userId = "60f07245837e0e980156e4a4";
+
+  beforeAll(async () => {
+    const newIssue = {
+      title: "This is Issue Title",
+      description: "This is Issue description",
+      images: [
+        "https://sample-url.com/of/image",
+        "https://sample-url.com/of/image",
+      ],
+    };
+
+    const res = await request(app)
+      .post(`/api/users/${userId}/issues`)
+      .send(newIssue);
+
+    issueId = res.body.data.issue._id;
+  });
+
+  afterAll(() => {
+    issueId = undefined;
+  });
+
+  test("Case: Success", (done) => {
+    const newIssueComment = {
+      text: "This is Issue Comment",
+    };
+
     request(app)
-      .get("/")
+      .post(`/api/users/${userId}/issues/${issueId}/comments`)
+      .send(newIssueComment)
       .then((response) => {
         expect(response.statusCode).toBe(200);
+
         done();
       });
   });
@@ -279,7 +309,7 @@ describe("POST /api/admin/user", () => {
   });
 });
 
-describe("PUT /admin/user/:userId", () => {
+describe("PUT /api/admin/user/:userId", () => {
   test("It should response the GET method", (done) => {
     request(app)
       .get("/")
@@ -320,7 +350,114 @@ describe("POST /api/admin/issues/issueType", () => {
   });
 });
 
-describe("GET /admin/issues/issueType", () => {
+describe("GET /api/admin/issues/issueType", () => {
+  beforeAll(async () => {
+    await Promise.all([
+      request(app).post("/api/admin/issues/issueType").send({
+        name: "Traffic Light",
+        city: "delhi",
+      }),
+      request(app).post("/api/admin/issues/issueType").send({
+        name: "Pollution",
+        city: "mumbai",
+      }),
+      request(app).post("/api/admin/issues/issueType").send({
+        name: "Water Issue",
+        city: "bangaluru",
+      }),
+    ]);
+  });
+
+  test("Case: Success", (done) => {
+    request(app)
+      .get("/api/admin/issues/issueType")
+      .then((response) => {
+        expect(response.statusCode).toBe(200);
+
+        expect(response.body).toMatchObject({
+          status: "Success",
+          data: expect.any(Object),
+        });
+        expect(response.body.data.issueTypes).toEqual(
+          expect.arrayContaining([expect.any(Object)]),
+        );
+
+        const { issueTypes } = response.body.data;
+
+        issueTypes.forEach((issueType) => {
+          expect(issueType).toMatchSnapshot({
+            _id: expect.any(String),
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            __v: expect.any(Number),
+          });
+        });
+
+        done();
+      });
+  });
+});
+
+describe("GET /api/admin/issues", () => {
+  const userId = "60f07245837e0e980156e4a4";
+
+  beforeAll(async () => {
+    const newIssue = {
+      title: "This is Issue Title",
+      description: "This is Issue description",
+      images: [
+        "https://sample-url.com/of/image",
+        "https://sample-url.com/of/image",
+      ],
+    };
+
+    await Promise.all([
+      request(app).post(`/api/users/${userId}/issues`).send(newIssue),
+      request(app).post(`/api/users/${userId}/issues`).send(newIssue),
+      request(app).post(`/api/users/${userId}/issues`).send(newIssue),
+    ]);
+  });
+
+  test("Case: Success with auth ADMIN", (done) => {
+    request(app)
+      .get("/api/admin/issues")
+      .then((response) => {
+        expect(response.statusCode).toBe(200);
+
+        expect(response.body).toMatchObject({
+          status: "Success",
+          data: expect.any(Object),
+        });
+        expect(response.body.data.issues).toEqual(
+          expect.arrayContaining([expect.any(Object)]),
+        );
+
+        const { issues } = response.body.data;
+
+        issues.forEach((issue) => {
+          expect(issue).toMatchSnapshot({
+            _id: expect.any(String),
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            __v: expect.any(Number),
+          });
+        });
+
+        done();
+      });
+  });
+
+  test("Case: Success with auth MANAGER", (done) => {
+    request(app)
+      .get("/")
+      .then((response) => {
+        expect(response.statusCode).toBe(200);
+        done();
+      });
+  });
+});
+
+describe("GET /api/admin/issues/:issueId", () => {
   test("It should response the GET method", (done) => {
     request(app)
       .get("/")
@@ -331,7 +468,7 @@ describe("GET /admin/issues/issueType", () => {
   });
 });
 
-describe("GET /admin/issues", () => {
+describe("GET /api/admin/issues/:issueId/comments", () => {
   test("It should response the GET method", (done) => {
     request(app)
       .get("/")
@@ -342,7 +479,7 @@ describe("GET /admin/issues", () => {
   });
 });
 
-describe("GET /admin/issues/:issueId", () => {
+describe("POST /api/admin/issues/:issueId/comments", () => {
   test("It should response the GET method", (done) => {
     request(app)
       .get("/")
@@ -353,29 +490,7 @@ describe("GET /admin/issues/:issueId", () => {
   });
 });
 
-describe("GET /admin/issues/:issueId/comments", () => {
-  test("It should response the GET method", (done) => {
-    request(app)
-      .get("/")
-      .then((response) => {
-        expect(response.statusCode).toBe(200);
-        done();
-      });
-  });
-});
-
-describe("POST /admin/issues/:issueId/comments", () => {
-  test("It should response the GET method", (done) => {
-    request(app)
-      .get("/")
-      .then((response) => {
-        expect(response.statusCode).toBe(200);
-        done();
-      });
-  });
-});
-
-describe("DELETE /admin/issues/:issueId/comments/:commentId", () => {
+describe("DELETE /api/admin/issues/:issueId/comments/:commentId", () => {
   test("It should response the GET method", (done) => {
     request(app)
       .get("/")
