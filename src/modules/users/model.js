@@ -18,34 +18,29 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
+      // 0 = USER, 1 = MANAGER, 2 = ADMIN
       enum: [0, 1, 2],
     },
     gender: {
       type: String,
-      required: false,
       enum: ["male", "female", "other"],
     },
     profession: {
       type: String,
-      required: false,
     },
     city: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
       unique: true,
-      required: true,
     },
     aadharNumber: {
       type: Number,
       unique: true,
-      required: true,
     },
     avatar: {
       type: String,
-      required: false,
     },
   },
   {

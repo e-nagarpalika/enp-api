@@ -7,22 +7,20 @@ const issueSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Types.ObjectId,
       ref: "users",
-    },
-    title: {
-      type: String,
       required: true,
     },
-    description: {
-      type: String,
+    issueId: {
+      type: mongoose.Types.ObjectId,
+      ref: "issues",
       required: true,
     },
-    images: {
-      type: [String],
+    text: {
+      type: String,
       required: true,
     },
   },
   {
-    collection: "issues",
+    collection: "issueComments",
     timestamps: {
       createdAt: "createdAt",
       updatedAt: "updatedAt",
@@ -30,4 +28,4 @@ const issueSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model("issue", issueSchema);
+module.exports = mongoose.model("issueComment", issueSchema);
