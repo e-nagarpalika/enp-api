@@ -13,17 +13,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
+      index: true,
     },
     accountType: {
-      type: Number,
+      type: String,
       required: true,
-      default: 0,
-      // 0 = USER, 1 = MANAGER, 2 = ADMIN
-      enum: [0, 1, 2],
+      default: "USER",
+      enum: ["USER", "MANAGER", "ADMIN"],
     },
     gender: {
       type: String,
-      enum: ["male", "female", "other"],
+      enum: ["MALE", "FEMALE", "OTHER"],
     },
     profession: {
       type: String,
@@ -34,10 +34,12 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       unique: true,
+      index: true,
     },
     aadharNumber: {
       type: Number,
       unique: true,
+      index: true,
     },
     avatar: {
       type: String,
