@@ -19,7 +19,7 @@ const login = async (req, res) => {
   const { firebaseToken } = req.body;
 
   try {
-    var { phone_number: phoneNumber, uid } = await firebaseAdmin
+    var { phone_number: phoneNumber } = await firebaseAdmin
       .auth()
       .verifyIdToken(firebaseToken);
   } catch (error) {
@@ -30,8 +30,6 @@ const login = async (req, res) => {
   }
 
   var user = await UserModel.findOne({ phoneNumber });
-
-  console.log(user, AUTH_SECRET);
 
   if (!user) {
     const newUser = UserModel({
@@ -51,7 +49,7 @@ const login = async (req, res) => {
   const accessToken = jwt.sign(
     {
       id: user.id,
-      phoneNumber: user.phoneNumber,
+      phoneNumber,
       role: user.accountType,
     },
     AUTH_SECRET,
@@ -61,7 +59,9 @@ const login = async (req, res) => {
 
   return res.json({
     status: "Success",
-    message: "LoggedIn",
+    data: {
+      user,
+    },
   });
 };
 

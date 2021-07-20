@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
+    isFirstTime: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     collection: "users",
