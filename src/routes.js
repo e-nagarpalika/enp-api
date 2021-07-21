@@ -4,7 +4,10 @@ const express = require("express");
 
 const router = express.Router();
 
-// const middleware = require("./middlewares/index");
+const {
+  user: userMiddleware,
+  admin: adminMiddleware,
+} = require("./middlewares");
 
 const createAdminCommentRoute = require("./modules/grievances/createAdminComment");
 const createCommentRoute = require("./modules/grievances/createComment");
@@ -20,7 +23,7 @@ const getIssueTypesRoute = require("./modules/grievances/getIssueTypes");
 const getUserByPhoneNumberRoute = require("./modules/users/getUserByPhoneNumber");
 const getUserIssuesRoute = require("./modules/grievances/getUserIssues");
 const loginRoute = require("./modules/auth/login");
-const registerRoute = require("./modules/auth/register");
+const registerRoute = require("./modules/users/register");
 const updateAccountRoute = require("./modules/users/updateAccount");
 const updateUserTypeRoute = require("./modules/users/updateUserType");
 
@@ -68,7 +71,7 @@ router.post("/login", loginRoute);
  *       200:
  *         description: User information is updated
  */
-router.put("/register", registerRoute);
+router.put("/register", userMiddleware, registerRoute);
 
 /**
  * @swagger
