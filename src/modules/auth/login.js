@@ -2,7 +2,7 @@
 
 const jwt = require("jsonwebtoken");
 
-const firebaseAdmin = require("../../middlewares/firebase");
+const firebaseAdmin = require("../../utils/firebase");
 
 const UserModel = require("../users/model");
 
@@ -55,11 +55,10 @@ const login = async (req, res) => {
     AUTH_SECRET,
   );
 
-  res.cookie("token", accessToken, { httpOnly: true });
-
   return res.json({
     status: "Success",
     data: {
+      token: accessToken,
       user,
     },
   });
