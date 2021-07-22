@@ -4,13 +4,13 @@ const Joi = require("joi");
 const IssueModel = require("./models/issue");
 
 const createIssue = async (req, res) => {
-  const paramsSchema = Joi.object({
-    userId: Joi.string().required(),
-  });
+  const { id: userId } = req.auth;
 
   const bodySchema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
+    location: Joi.string().required(),
+    category: Joi.string().required(),
     images: Joi.array().items(Joi.string().uri()).required(),
   });
 
@@ -23,11 +23,8 @@ const createIssue = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var { userId } = await paramsSchema.validateAsync(req.params, options);
-    var { title, description, images } = await bodySchema.validateAsync(
-      req.body,
-      options,
-    );
+    var { title, description, images, location, category } =
+      await bodySchema.validateAsync(req.body, options);
   } catch (validateError) {
     // console.log(validateError);
 
@@ -44,6 +41,8 @@ const createIssue = async (req, res) => {
       description,
       images,
       userId,
+      location,
+      category,
     });
 
     var issue = await newIssue.save();
@@ -61,7 +60,10 @@ const createIssue = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      issue,
+      issue: {
+        ...issue.toJSON(),
+        id: issue._id,
+      },
     },
   });
 };
