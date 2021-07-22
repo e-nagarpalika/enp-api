@@ -132,7 +132,7 @@ router.get("/users/:userId/issues", getUserIssuesRoute);
  *       200:
  *         description:
  */
-router.post("/users/:userId/issues", createIssueRoute);
+router.post("/issues", userMiddleware, createIssueRoute);
 
 /**
  * @swagger
