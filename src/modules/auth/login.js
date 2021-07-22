@@ -59,7 +59,10 @@ const login = async (req, res) => {
     status: "Success",
     data: {
       token: accessToken,
-      user,
+      user: {
+        ...user.toJSON(),
+        id: user.id,
+      },
     },
   });
 };

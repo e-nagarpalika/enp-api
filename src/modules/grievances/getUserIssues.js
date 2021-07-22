@@ -30,7 +30,7 @@ const getUserIssues = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var issues = await IssueModel.find({ userId });
+    var issues = await IssueModel.find({ userId }).lean();
   } catch (dbError) {
     // console.log(dbError);
 
@@ -43,7 +43,7 @@ const getUserIssues = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      issues,
+      issues: issues.map(({ _id, ...rest }) => ({ ...rest, id: _id })),
     },
   });
 };
