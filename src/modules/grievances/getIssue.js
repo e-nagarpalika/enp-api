@@ -20,7 +20,6 @@ const getIssue = async (req, res) => {
     // NOTE: var is used intentionally here.
     var { issueId } = await schema.validateAsync(req.params, options);
   } catch (validateError) {
-    // console.log("validateError");
     // console.log(validateError);
 
     return res.json({

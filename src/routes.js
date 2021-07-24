@@ -19,7 +19,10 @@ const getAdminIssueRoute = require("./modules/grievances/getAdminIssue");
 const getAdminIssuesRoute = require("./modules/grievances/getAdminIssues");
 const getCommentsRoute = require("./modules/grievances/getComments");
 const getIssueRoute = require("./modules/grievances/getIssue");
+const getIssueStatsRoute = require("./modules/grievances/getIssueStats");
 const getIssueTypesRoute = require("./modules/grievances/getIssueTypes");
+const getIssueGraphByDateRoute = require("./modules/grievances/getIssueGraphByCategory");
+const getIssueGraphByCategoryRoute = require("./modules/grievances/getIssueGraphByDate");
 const getUserByPhoneNumberRoute = require("./modules/users/getUserByPhoneNumber");
 const getUserIssuesRoute = require("./modules/grievances/getUserIssues");
 const loginRoute = require("./modules/auth/login");
@@ -175,6 +178,51 @@ router.post("/users/:userId/issues/:issueId/comments", createCommentRoute);
  *         description: Signed In
  */
 router.get("/users/:userId/issues/:issueId/comments", getCommentsRoute);
+
+/**
+ * @swagger
+ * /api/issues/stats:
+ *   get:
+ *     summary: get issue statistics
+ *     description: get issue statistics
+ *     tags:
+ *     - issues
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.get("/issues/stats", getIssueStatsRoute);
+
+/**
+ * @swagger
+ * /api/issues/graphs/byDate:
+ *   get:
+ *     summary: get issue statistics
+ *     description: get issue statistics
+ *     tags:
+ *     - issues
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.get("/issues/graphs/byDate", getIssueGraphByDateRoute);
+
+/**
+ * @swagger
+ * /api/issues/graphs/byCategory:
+ *   get:
+ *     summary: get issue statistics
+ *     description: get issue statistics
+ *     tags:
+ *     - issues
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.get("/issues/graphs/byCategory", getIssueGraphByCategoryRoute);
 
 /**
  * @swagger

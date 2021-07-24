@@ -40,6 +40,21 @@ const PROFESSIONS = {
   other: "OTHER",
 };
 
+/**
+ * NONE - when issue was created
+ * REVIEW - issue will be reviews by officers
+ * PROGRESS - discussion has started on this issue
+ * ACTION - action has been initiated by officers
+ * RESOLVED - issue has been resolved
+ */
+const GRIEVANCE_STATUS = {
+  none: "NONE",
+  review: "REVIEW",
+  progress: "PROGRESS",
+  action: "ACTION",
+  resolved: "RESOLVED",
+};
+
 module.exports = {
   ACCOUNT_TYPE,
   FETCH_STATUS,
@@ -47,4 +62,5 @@ module.exports = {
   LOCATION,
   PROFESSIONS,
   STATUS_CODES,
+  GRIEVANCE_STATUS,
 };
