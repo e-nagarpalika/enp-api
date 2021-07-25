@@ -23,7 +23,12 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 const app = express();
 
-app.use(cors({ origin: WEB_URI }));
+app.use(
+  cors({
+    credentials: true,
+    origin: WEB_URI,
+  }),
+);
 app.use(cookieParser());
 app.use(express.json());
 // app.use(middleware.decodeToken);

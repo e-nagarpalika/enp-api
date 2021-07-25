@@ -6,7 +6,7 @@ const IssueModel = require("./models/issue");
 const getIssue = async (req, res) => {
   // create schema object
   const schema = Joi.object({
-    issueId: Joi.string().required(),
+    issueId: Joi.string().length(24).required(),
   });
 
   // schema options
@@ -20,7 +20,6 @@ const getIssue = async (req, res) => {
     // NOTE: var is used intentionally here.
     var { issueId } = await schema.validateAsync(req.params, options);
   } catch (validateError) {
-    // console.log("validateError");
     // console.log(validateError);
 
     return res.json({
@@ -44,14 +43,17 @@ const getIssue = async (req, res) => {
   if (!issue) {
     return res.json({
       status: "Error",
-      message: "Issue Not Found",
+      message: "Not Found",
     });
   }
 
   return res.json({
     status: "Success",
     data: {
-      issue,
+      issue: {
+        ...issue.toJSON(),
+        id: issue.id,
+      },
     },
   });
 };

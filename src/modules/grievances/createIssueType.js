@@ -1,25 +1,26 @@
 /** @format */
 const Joi = require("joi");
 
+const { CITIES } = require("../../utils/constants");
 const IssueTypeModel = require("./models/issueType");
 
 const createIssueType = async (req, res) => {
   // create schema object
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    city: Joi.string().valid("bangaluru", "delhi", "mumbai").required(),
+  const schema = Joi.object().keys({
+    title: Joi.string().required(),
+    location: Joi.string().valid(...Object.values(CITIES)),
   });
 
   // schema options
   const options = {
     abortEarly: false, // include all errors
     allowUnknown: false, // ignore unknown props
-    stripUnknown: true, // remove unknown props
+    stripUnknown: false, // remove unknown props
   };
 
   try {
     // NOTE: var is used intentionally here.
-    var value = await schema.validateAsync(req.body, options);
+    var { title, location } = await schema.validateAsync(req.body);
   } catch (validateError) {
     // console.log(validateError);
 
@@ -31,7 +32,7 @@ const createIssueType = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var newIssueType = IssueTypeModel(value);
+    var newIssueType = IssueTypeModel({ title, location });
 
     var issueType = await newIssueType.save();
   } catch (dbError) {
@@ -46,7 +47,10 @@ const createIssueType = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      issueType,
+      issueType: {
+        ...issueType.toJSON(),
+        id: issueType.id,
+      },
     },
   });
 };

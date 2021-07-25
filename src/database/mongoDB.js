@@ -14,8 +14,8 @@ module.exports = {
     return mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      autoIndex: false, // NODE_ENV !== "production" || NODE_ENV !== "development"
-      // autoIndex: true,
+      // autoIndex: false, // NODE_ENV !== "production" || NODE_ENV !== "development"
+      autoIndex: true,
       useCreateIndex: true,
       useFindAndModify: false,
     });

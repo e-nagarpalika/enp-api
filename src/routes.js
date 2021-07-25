@@ -4,7 +4,10 @@ const express = require("express");
 
 const router = express.Router();
 
-// const middleware = require("./middlewares/index");
+const {
+  user: userMiddleware,
+  admin: adminMiddleware,
+} = require("./middlewares");
 
 const createAdminCommentRoute = require("./modules/grievances/createAdminComment");
 const createCommentRoute = require("./modules/grievances/createComment");
@@ -16,11 +19,14 @@ const getAdminIssueRoute = require("./modules/grievances/getAdminIssue");
 const getAdminIssuesRoute = require("./modules/grievances/getAdminIssues");
 const getCommentsRoute = require("./modules/grievances/getComments");
 const getIssueRoute = require("./modules/grievances/getIssue");
+const getIssueStatsRoute = require("./modules/grievances/getIssueStats");
 const getIssueTypesRoute = require("./modules/grievances/getIssueTypes");
+const getIssueGraphByDateRoute = require("./modules/grievances/getIssueGraphByCategory");
+const getIssueGraphByCategoryRoute = require("./modules/grievances/getIssueGraphByDate");
 const getUserByPhoneNumberRoute = require("./modules/users/getUserByPhoneNumber");
 const getUserIssuesRoute = require("./modules/grievances/getUserIssues");
 const loginRoute = require("./modules/auth/login");
-const registerRoute = require("./modules/auth/register");
+const registerRoute = require("./modules/users/register");
 const updateAccountRoute = require("./modules/users/updateAccount");
 const updateUserTypeRoute = require("./modules/users/updateUserType");
 
@@ -68,7 +74,7 @@ router.post("/login", loginRoute);
  *       200:
  *         description: User information is updated
  */
-router.put("/register", registerRoute);
+router.put("/register", userMiddleware, registerRoute);
 
 /**
  * @swagger
@@ -129,7 +135,7 @@ router.get("/users/:userId/issues", getUserIssuesRoute);
  *       200:
  *         description:
  */
-router.post("/users/:userId/issues", createIssueRoute);
+router.post("/issues", userMiddleware, createIssueRoute);
 
 /**
  * @swagger
@@ -172,6 +178,51 @@ router.post("/users/:userId/issues/:issueId/comments", createCommentRoute);
  *         description: Signed In
  */
 router.get("/users/:userId/issues/:issueId/comments", getCommentsRoute);
+
+/**
+ * @swagger
+ * /api/issues/stats:
+ *   get:
+ *     summary: get issue statistics
+ *     description: get issue statistics
+ *     tags:
+ *     - issues
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.get("/issues/stats", getIssueStatsRoute);
+
+/**
+ * @swagger
+ * /api/issues/graphs/byDate:
+ *   get:
+ *     summary: get issue statistics
+ *     description: get issue statistics
+ *     tags:
+ *     - issues
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.get("/issues/graphs/byDate", getIssueGraphByDateRoute);
+
+/**
+ * @swagger
+ * /api/issues/graphs/byCategory:
+ *   get:
+ *     summary: get issue statistics
+ *     description: get issue statistics
+ *     tags:
+ *     - issues
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.get("/issues/graphs/byCategory", getIssueGraphByCategoryRoute);
 
 /**
  * @swagger
@@ -231,11 +282,11 @@ router.post("/admin/user", getUserByPhoneNumberRoute);
  *       200:
  *         description: true/false
  */
-router.put("/admin/user/:userId", updateUserTypeRoute);
+router.put("/admin/users", adminMiddleware, updateUserTypeRoute);
 
 /**
  * @swagger
- * /api/admin/issues/issueType:
+ * /api/admin/issues/issueTypes:
  *   post:
  *     description: create an issue Type
  *     tags:
@@ -250,11 +301,11 @@ router.put("/admin/user/:userId", updateUserTypeRoute);
  *       201:
  *         description: true/false
  */
-router.post("/admin/issues/issueType", createIssueTypeRoute);
+router.post("/admin/issues/issueTypes", adminMiddleware, createIssueTypeRoute);
 
 /**
  * @swagger
- * /api/admin/issues/issueType:
+ * /api/admin/issues/issueTypes:
  *   post:
  *     description: get all issue types
  *     tags:
@@ -269,7 +320,7 @@ router.post("/admin/issues/issueType", createIssueTypeRoute);
  *       201:
  *         description: true/false
  */
-router.get("/admin/issues/issueType", getIssueTypesRoute);
+router.get("/admin/issues/issueTypes", adminMiddleware, getIssueTypesRoute);
 
 /**
  * @swagger

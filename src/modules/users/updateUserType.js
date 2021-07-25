@@ -1,39 +1,65 @@
 /** @format */
+const Joi = require("joi");
 
 const userModel = require("./model");
+const { ACCOUNT_TYPE, LOCATION } = require("../../utils/constants");
 
 const updateUserType = async (req, res) => {
-  const { role } = req.user;
-  // eslint-disable-next-line no-console
-  // console.log(role);
-  if (role !== 2) {
-    return res.status(403).send("Forbidden Action");
-  }
+  const schema = Joi.object({
+    phoneNumber: Joi.string().length(10).required(),
+    accountType: Joi.string()
+      .valid(...Object.values(ACCOUNT_TYPE))
+      .required(),
+    location: Joi.string()
+      .valid(...Object.values(LOCATION))
+      .when("accountType", {
+        is: ACCOUNT_TYPE.manager,
+        then: Joi.required(),
+      }),
+  });
 
-  const { phoneNumber, accountType, city } = req.body;
+  // schema options
+  const options = {
+    abortEarly: false, // include all errors
+    allowUnknown: false, // ignore unknown props
+    stripUnknown: true, // remove unknown props
+  };
 
-  const user = await userModel.findOne({ phoneNumber });
+  try {
+    // NOTE: var is used intentionally here.
+    var { phoneNumber, accountType, location } = await schema.validateAsync(
+      req.body,
+      options,
+    );
+  } catch (validateError) {
+    console.log(validateError);
 
-  if (accountType === 2) {
-    user.accountType = accountType;
-  }
-
-  if (accountType === 1 && city) {
-    user.accountType = accountType;
-    user.city = city;
-  }
-
-  if (accountType === 1 && !city) {
-    return res.status(409).json({
-      status: false,
-      message: "Incomplete Request",
+    return res.json({
+      status: "Error",
+      message: "Input Type Error",
     });
   }
 
+  const user = await userModel.findOne({ phoneNumber: `+91${phoneNumber}` });
+
+  if (!user) {
+    return res.json({
+      status: "Error",
+      message: "Not Found",
+    });
+  }
+
+  user.accountType = accountType;
+
+  if (accountType === ACCOUNT_TYPE.manager) {
+    user.location = location;
+  }
+
   await user.save();
-  return res.status(200).json({
-    status: true,
-    message: "Upgraded to Admin",
+
+  return res.json({
+    status: "Success",
+    message: `Account is updated to ${accountType}`,
   });
 };
 

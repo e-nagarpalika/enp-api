@@ -2,43 +2,73 @@
 
 const jwt = require("jsonwebtoken");
 
-const userModel = require("../users/model");
+const firebaseAdmin = require("../../utils/firebase");
 
-const { ACCESS_TOKEN_SECRET } = process.env;
+const UserModel = require("../users/model");
 
-// eslint-disable-next-line consistent-return
+const { AUTH_SECRET } = process.env;
+
+// 1. get firebase auth token
+// 2. validate firebase auth token and get user data if success
+// 3. if un-successful return with Error
+// 4. if successful, check if user already exists in mongoDB or not
+// 5. if user account already exists, generate a JWT token and return
+// 6. if user account don't exists, create a new account in MongoDB
+// and then generate JWT token and return to user.
 const login = async (req, res) => {
-  const { phoneNumber } = req.currentUser;
-
-  if (!phoneNumber) {
-    return res.status(403).send("Unauthorized");
-  }
+  const { firebaseToken } = req.body;
 
   try {
-    const user = await userModel.findOne({ phoneNumber });
+    var { phone_number: phoneNumber } = await firebaseAdmin
+      .auth()
+      .verifyIdToken(firebaseToken);
+  } catch (validationError) {
+    // console.log(validationError);
 
-    const accessToken = jwt.sign(
-      {
-        id: user.id,
-        phoneNumber: user.phoneNumber,
-        role: user.user_type,
-      },
-      ACCESS_TOKEN_SECRET,
-    );
-
-    res.cookie("token", accessToken, { httpOnly: true });
-
-    return res.status(200).json({
-      status: true,
-      message: "LoggedIn",
-    });
-  } catch (e) {
-    res.status(404).json({
-      status: false,
-      message: "User Not Found",
-      error: e,
+    return res.json({
+      status: "Error",
+      message: "Invalid Firebase Auth Token",
     });
   }
+
+  var user = await UserModel.findOne({ phoneNumber });
+
+  if (!user) {
+    const newUser = UserModel({
+      phoneNumber,
+    });
+
+    try {
+      user = await newUser.save();
+    } catch (dbError) {
+      // console.log(dbError);
+
+      return res.json({
+        status: "Error",
+        message: "Something went wrong, please try after sometime. 2",
+      });
+    }
+  }
+
+  const accessToken = jwt.sign(
+    {
+      id: user.id,
+      phoneNumber,
+      role: user.accountType,
+    },
+    AUTH_SECRET,
+  );
+
+  return res.json({
+    status: "Success",
+    data: {
+      token: accessToken,
+      user: {
+        ...user.toJSON(),
+        id: user.id,
+      },
+    },
+  });
 };
 
 module.exports = login;
