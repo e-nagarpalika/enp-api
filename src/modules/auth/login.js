@@ -22,7 +22,9 @@ const login = async (req, res) => {
     var { phone_number: phoneNumber } = await firebaseAdmin
       .auth()
       .verifyIdToken(firebaseToken);
-  } catch (error) {
+  } catch (validationError) {
+    // console.log(validationError);
+
     return res.json({
       status: "Error",
       message: "Invalid Firebase Auth Token",
@@ -38,7 +40,9 @@ const login = async (req, res) => {
 
     try {
       user = await newUser.save();
-    } catch (error) {
+    } catch (dbError) {
+      // console.log(dbError);
+
       return res.json({
         status: "Error",
         message: "Something went wrong, please try after sometime. 2",

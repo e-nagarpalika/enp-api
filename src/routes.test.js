@@ -324,7 +324,7 @@ describe("POST /api/admin/issues/issueType", () => {
   test("CASE: Success", (done) => {
     const newIssueTypeObj = {
       name: "Traffic Light",
-      city: "delhi",
+      location: "delhi",
     };
 
     request(app)
@@ -341,7 +341,7 @@ describe("POST /api/admin/issues/issueType", () => {
           issueType: expect.objectContaining({
             _id: expect.any(String),
             name: expect.any(String),
-            city: expect.toBeOneOf(["delhi", "bangaluru", "mumbai"]),
+            location: expect.toBeOneOf(["delhi", "bangaluru", "mumbai"]),
           }),
         });
 
@@ -355,15 +355,15 @@ describe("GET /api/admin/issues/issueType", () => {
     await Promise.all([
       request(app).post("/api/admin/issues/issueType").send({
         name: "Traffic Light",
-        city: "delhi",
+        location: "delhi",
       }),
       request(app).post("/api/admin/issues/issueType").send({
         name: "Pollution",
-        city: "mumbai",
+        location: "mumbai",
       }),
       request(app).post("/api/admin/issues/issueType").send({
         name: "Water Issue",
-        city: "bangaluru",
+        location: "bangaluru",
       }),
     ]);
   });
