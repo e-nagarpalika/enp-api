@@ -12,7 +12,7 @@ const register = async (req, res) => {
     email: Joi.string().email(),
     // avatar: Joi.string().uri(),
     aadhar: Joi.string(),
-    city: Joi.string(),
+    location: Joi.string(),
     gender: Joi.string(),
     profession: Joi.string(),
     phoneNumber: Joi.string(),
@@ -58,7 +58,10 @@ const register = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      user,
+      user: {
+        ...user.toJSON(),
+        id: user.id,
+      },
     },
   });
 };

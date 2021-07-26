@@ -1,6 +1,7 @@
 /** @format */
 
 const { mongoose } = require("../../database/mongoDB");
+const { ACCOUNT_TYPE, GENDER } = require("../../utils/constants");
 
 const userSchema = new mongoose.Schema(
   {
@@ -19,27 +20,23 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: "USER",
-      enum: ["USER", "MANAGER", "ADMIN"],
+      enum: Object.values(ACCOUNT_TYPE),
     },
     gender: {
       type: String,
-      enum: ["MALE", "FEMALE", "OTHER"],
+      enum: Object.values(GENDER),
     },
     profession: {
       type: String,
     },
-    city: {
+    location: {
       type: String,
     },
     email: {
       type: String,
-      unique: true,
-      index: true,
     },
     aadharNumber: {
       type: Number,
-      unique: true,
-      index: true,
     },
     avatar: {
       type: String,
