@@ -50,7 +50,7 @@ const PROFESSIONS = {
 const GRIEVANCE_STATUS = {
   none: "NONE",
   review: "REVIEW",
-  progress: "PROGRESS",
+  // progress: "PROGRESS",
   action: "ACTION",
   resolved: "RESOLVED",
 };
