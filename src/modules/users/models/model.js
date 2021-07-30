@@ -1,7 +1,7 @@
 /** @format */
 
 const { mongoose } = require("../../../database/mongoDB");
-const { ACCOUNT_TYPE, GENDER } = require("../../../utils/constants");
+const { ACCOUNT_TYPE, GENDER, LOCATIONS } = require("../../../utils/constants");
 
 const userSchema = new mongoose.Schema(
   {
@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema(
     },
     location: {
       type: String,
+      enum: Object.values(LOCATIONS),
     },
     email: {
       type: String,

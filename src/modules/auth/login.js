@@ -45,7 +45,7 @@ const login = async (req, res) => {
 
       return res.json({
         status: "Error",
-        message: "Something went wrong, please try after sometime. 2",
+        message: "Something went wrong, please try after sometime.",
       });
     }
   }
