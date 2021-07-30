@@ -1,7 +1,7 @@
 /** @format */
 
-const { mongoose } = require("../../database/mongoDB");
-const { ACCOUNT_TYPE, GENDER } = require("../../utils/constants");
+const { mongoose } = require("../../../database/mongoDB");
+const { ACCOUNT_TYPE, GENDER } = require("../../../utils/constants");
 
 const userSchema = new mongoose.Schema(
   {
