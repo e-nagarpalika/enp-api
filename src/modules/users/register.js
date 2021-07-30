@@ -2,7 +2,7 @@
 
 const Joi = require("joi");
 
-const { LOCATION, GENDER, PROFESSIONS } = require("../../utils/constants");
+const { LOCATIONS, GENDER, PROFESSIONS } = require("../../utils/constants");
 const UserModel = require("./models/model");
 
 const register = async (req, res) => {
@@ -14,7 +14,7 @@ const register = async (req, res) => {
     // avatar: Joi.string().uri().required(),
     aadharNumber: Joi.string().length(16).required(),
     location: Joi.string()
-      .valid(...Object.values(LOCATION))
+      .valid(...Object.values(LOCATIONS))
       .required(),
     gender: Joi.string()
       .valid(...Object.values(GENDER))
@@ -22,7 +22,6 @@ const register = async (req, res) => {
     profession: Joi.string()
       .valid(...Object.values(PROFESSIONS))
       .required(),
-    phoneNumber: Joi.string().length(10).required(),
   });
 
   const options = {
