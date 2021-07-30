@@ -20,6 +20,7 @@ const getAdminIssuesRoute = require("./modules/grievances/getAdminIssues");
 const getCommentsRoute = require("./modules/grievances/getComments");
 const getIssueRoute = require("./modules/grievances/getIssue");
 const getIssueStatsRoute = require("./modules/grievances/getIssueStats");
+const getIssueCountRoute = require("./modules/grievances/getIssueCount");
 const getIssueTypesRoute = require("./modules/grievances/getIssueTypes");
 const getIssueGraphByDateRoute = require("./modules/grievances/getIssueGraphByCategory");
 const getIssueGraphByCategoryRoute = require("./modules/grievances/getIssueGraphByDate");
@@ -134,7 +135,7 @@ router.get("/users/:userId/issues", userMiddleware, getUserIssuesRoute);
 
 /**
  * @swagger
- * /api/users/:userId/issues:
+ * /api/issues:
  *   post:
  *     summary: create new issue by USER
  *     description: create new issue by USER
@@ -208,6 +209,27 @@ router.get("/users/:userId/issues/:issueId/comments", getCommentsRoute);
  *         description:
  */
 router.get("/issues/stats", getIssueStatsRoute);
+
+/**
+ * @swagger
+ * /api/issues/count:
+ *   post:
+ *     summary: get count of Grievances
+ *     description: get count of Grievances
+ *     tags:
+ *     - users
+ *     - issues
+ *     parameters:
+ *     - token: JWT Token
+ *       description: JWT Token
+ *       in: String
+ *       required: true
+ *       type: String
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.get("/issues/count", userMiddleware, getIssueCountRoute);
 
 /**
  * @swagger

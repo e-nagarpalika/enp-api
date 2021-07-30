@@ -2,22 +2,15 @@
 const Joi = require("joi");
 
 const IssueModel = require("./models/issue");
-
 const {
-  LOCATIONS,
-  GRIEVANCE_CATEGORIES,
   GRIEVANCE_STATUS,
-  SORT_BY,
+  GRIEVANCE_CATEGORIES,
+  LOCATIONS,
 } = require("../../utils/constants");
 
-const getUserIssues = async (req, res) => {
-  // create schema object
-  const paramSchema = Joi.object({
-    userId: Joi.string().required(),
-  });
-
+const getIssueCount = async (req, res) => {
   const querySchema = Joi.object({
-    sortBy: Joi.string().valid(...Object.values(SORT_BY)),
+    userId: Joi.string().alphanum().length(24),
     location: Joi.string().valid(...Object.values(LOCATIONS)),
     category: Joi.string().valid(...Object.values(GRIEVANCE_CATEGORIES)),
     status: Joi.string().valid(...Object.values(GRIEVANCE_STATUS)),
@@ -34,11 +27,10 @@ const getUserIssues = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var { userId } = await paramSchema.validateAsync(req.params, options);
-    var { sortBy, location, category, status } =
+    var { userId, location, category, status } =
       await querySchema.validateAsync(req.query, options);
   } catch (validateError) {
-    // console.log(validateError);
+    console.log(validateError);
 
     return res.json({
       status: "Error",
@@ -46,8 +38,15 @@ const getUserIssues = async (req, res) => {
     });
   }
 
-  let filterQuery = { userId };
-  let sort = { createdAt: -1 };
+  let filterQuery = {};
+
+  if (typeof userId !== "undefined") {
+    filterQuery = {
+      ...filterQuery,
+      userId,
+    };
+  }
+
   if (
     typeof location !== "undefined" &&
     Object.values(LOCATIONS).findIndex((l) => l === location) > -1
@@ -79,24 +78,10 @@ const getUserIssues = async (req, res) => {
   }
 
   try {
-    const query = IssueModel.find(filterQuery);
+    const query = IssueModel.countDocuments(filterQuery);
 
-    if (sortBy === SORT_BY.createdAt) {
-      sort = { ...sort, createdAt: -1 };
-    }
-    if (sortBy === SORT_BY.createdAt_desc) {
-      sort = { ...sort, createdAt: 1 };
-    }
-    if (sortBy === SORT_BY.updatedAt) {
-      sort = { ...sort, updatedAt: -1 };
-    }
-    if (sortBy === SORT_BY.updatedAt_desc) {
-      sort = { ...sort, updatedAt: 1 };
-    }
-
-    
     // NOTE: var is used intentionally here.
-    var issues = await query.lean();
+    var count = await query.lean();
   } catch (dbError) {
     // console.log(dbError);
 
@@ -109,9 +94,9 @@ const getUserIssues = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      issues: issues.map(({ _id, ...rest }) => ({ ...rest, id: _id })),
+      count,
     },
   });
 };
 
-module.exports = getUserIssues;
+module.exports = getIssueCount;
