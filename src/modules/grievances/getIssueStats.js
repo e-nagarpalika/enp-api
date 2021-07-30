@@ -13,18 +13,17 @@ const getIssueStats = async (req, res) => {
       // total issues in progress
       IssueModel.countDocuments({
         status: {
-          $not: {
-            $in: [
-              GRIEVANCE_STATUS.action,
-              GRIEVANCE_STATUS.none,
-              GRIEVANCE_STATUS.resolved,
-              GRIEVANCE_STATUS.review,
-            ],
-          },
+          $in: [
+            GRIEVANCE_STATUS.none,
+            GRIEVANCE_STATUS.review,
+            GRIEVANCE_STATUS.action,
+          ],
         },
       }),
       // total issues resolved
-      IssueModel.countDocuments({ status: GRIEVANCE_STATUS.resolved }),
+      IssueModel.countDocuments({
+        status: GRIEVANCE_STATUS.resolved,
+      }),
     ]);
   } catch (dbError) {
     // console.log(dbError);
