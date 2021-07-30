@@ -27,7 +27,7 @@ const GENDER = {
   other: "OTHER",
 };
 
-const LOCATION = {
+const LOCATIONS = {
   bangaluru: "BANGALURU",
   delhi: "DELHI",
   mumbai: "MUMBAI",
@@ -55,12 +55,33 @@ const GRIEVANCE_STATUS = {
   resolved: "RESOLVED",
 };
 
+const GRIEVANCE_CATEGORIES = [
+  "Road Safety & Traffic",
+  "Electricity",
+  "Ration Service",
+  "Housing and Development",
+  "Water Delivery",
+  "Sanitation",
+  "Vigilance & Anti-corruption",
+  "Public Safety",
+  "Healthcare",
+];
+
+const SORT_BY = {
+  createdAt: "createdAt",
+  createdAt_desc: "createdAt_desc",
+  updatedAt: "updatedAt",
+  updatedAt_desc: "updatedAt_desc",
+};
+
 module.exports = {
   ACCOUNT_TYPE,
   FETCH_STATUS,
   GENDER,
-  LOCATION,
-  PROFESSIONS,
-  STATUS_CODES,
+  GRIEVANCE_CATEGORIES,
   GRIEVANCE_STATUS,
+  LOCATIONS,
+  PROFESSIONS,
+  SORT_BY,
+  STATUS_CODES,
 };

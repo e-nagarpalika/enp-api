@@ -2,20 +2,27 @@
 
 const Joi = require("joi");
 
-const UserModel = require("./model");
+const { LOCATION, GENDER, PROFESSIONS } = require("../../utils/constants");
+const UserModel = require("./models/model");
 
 const register = async (req, res) => {
   const { id: userId } = req.auth;
 
   const bodySchema = Joi.object({
-    name: Joi.string(),
-    email: Joi.string().email(),
-    // avatar: Joi.string().uri(),
-    aadhar: Joi.string(),
-    location: Joi.string(),
-    gender: Joi.string(),
-    profession: Joi.string(),
-    phoneNumber: Joi.string(),
+    name: Joi.string().min(4).max(15).required(),
+    email: Joi.string().email().required(),
+    // avatar: Joi.string().uri().required(),
+    aadharNumber: Joi.string().length(16).required(),
+    location: Joi.string()
+      .valid(...Object.values(LOCATION))
+      .required(),
+    gender: Joi.string()
+      .valid(...Object.values(GENDER))
+      .required(),
+    profession: Joi.string()
+      .valid(...Object.values(PROFESSIONS))
+      .required(),
+    phoneNumber: Joi.string().length(10).required(),
   });
 
   const options = {

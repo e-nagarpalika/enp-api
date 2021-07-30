@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const firebaseAdmin = require("../../utils/firebase");
 
-const UserModel = require("../users/model");
+const UserModel = require("../users/models/model");
 
 const { AUTH_SECRET } = process.env;
 
