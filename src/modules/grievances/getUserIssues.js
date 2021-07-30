@@ -3,11 +3,27 @@ const Joi = require("joi");
 
 const IssueModel = require("./models/issue");
 
+const {
+  LOCATIONS,
+  GRIEVANCE_CATEGORIES,
+  GRIEVANCE_STATUS,
+  SORT_BY,
+} = require("../../utils/constants");
+
 const getUserIssues = async (req, res) => {
   // create schema object
-  const schema = Joi.object({
+  const paramSchema = Joi.object({
     userId: Joi.string().required(),
   });
+
+  const querySchema = Joi.object({
+    sortBy: Joi.string().valid(...Object.values(SORT_BY)),
+    location: Joi.string().valid(...Object.values(LOCATIONS)),
+    category: Joi.string().valid(...Object.values(GRIEVANCE_CATEGORIES)),
+    status: Joi.string().valid(...Object.values(GRIEVANCE_STATUS)),
+  })
+    .min(0)
+    .max(4);
 
   // schema options
   const options = {
@@ -18,7 +34,9 @@ const getUserIssues = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var { userId } = await schema.validateAsync(req.params, options);
+    var { userId } = await paramSchema.validateAsync(req.params, options);
+    var { sortBy, location, category, status } =
+      await querySchema.validateAsync(req.query, options);
   } catch (validateError) {
     // console.log(validateError);
 
@@ -28,9 +46,57 @@ const getUserIssues = async (req, res) => {
     });
   }
 
+  let filterQuery = { userId };
+  let sort = { createdAt: -1 };
+
   try {
     // NOTE: var is used intentionally here.
-    var issues = await IssueModel.find({ userId }).lean();
+    const query = IssueModel.find(filterQuery);
+
+    if (
+      typeof location !== "undefined" &&
+      Object.values(LOCATIONS).findIndex((l) => l === location) > -1
+    ) {
+      filterQuery = {
+        ...filterQuery,
+        location,
+      };
+    }
+
+    if (
+      typeof category !== "undefined" &&
+      Object.values(GRIEVANCE_CATEGORIES).findIndex((l) => l === category) > -1
+    ) {
+      filterQuery = {
+        ...filterQuery,
+        category,
+      };
+    }
+
+    if (
+      typeof status !== "undefined" &&
+      Object.values(GRIEVANCE_STATUS).findIndex((l) => l === status) > -1
+    ) {
+      filterQuery = {
+        ...filterQuery,
+        status,
+      };
+    }
+
+    if (sortBy === SORT_BY.createdAt) {
+      sort = { ...sort, createdAt: -1 };
+    }
+    if (sortBy === SORT_BY.createdAt_desc) {
+      sort = { ...sort, createdAt: 1 };
+    }
+    if (sortBy === SORT_BY.updatedAt) {
+      sort = { ...sort, updatedAt: -1 };
+    }
+    if (sortBy === SORT_BY.updatedAt_desc) {
+      sort = { ...sort, updatedAt: 1 };
+    }
+
+    var issues = await query.lean();
   } catch (dbError) {
     // console.log(dbError);
 
