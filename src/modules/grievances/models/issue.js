@@ -1,7 +1,7 @@
 /** @format */
 
 const { mongoose } = require("../../../database/mongoDB");
-const { GRIEVANCE_STATUS } = require("../../../utils/constants");
+const { GRIEVANCE_STATUS, LOCATIONS } = require("../../../utils/constants");
 
 const issueSchema = new mongoose.Schema(
   {
@@ -24,6 +24,7 @@ const issueSchema = new mongoose.Schema(
     location: {
       type: String,
       required: true,
+      enum: [...Object.values(LOCATIONS)],
     },
     category: {
       type: String,
@@ -34,6 +35,17 @@ const issueSchema = new mongoose.Schema(
       required: true,
       enum: [...Object.values(GRIEVANCE_STATUS)],
       default: GRIEVANCE_STATUS.none,
+    },
+    geoLocation: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
     },
   },
   {

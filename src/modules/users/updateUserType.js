@@ -1,7 +1,7 @@
 /** @format */
 const Joi = require("joi");
 
-const userModel = require("./model");
+const userModel = require("./models/model");
 const { ACCOUNT_TYPE, LOCATION } = require("../../utils/constants");
 
 const updateUserType = async (req, res) => {

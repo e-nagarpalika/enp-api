@@ -1,7 +1,7 @@
 /** @format */
 const Joi = require("joi");
 
-const UserModel = require("./model");
+const UserModel = require("./models/model");
 
 const updateAccount = async (req, res) => {
   const paramsSchema = Joi.object({
@@ -9,10 +9,10 @@ const updateAccount = async (req, res) => {
   });
 
   const bodySchema = Joi.object({
-    name: Joi.string(),
+    name: Joi.string().min(4).max(15),
     email: Joi.string().email(),
     avatar: Joi.string().uri(),
-    aadhar: Joi.string().uri(),
+    aadhar: Joi.string().length(16),
   })
     .min(1)
     .max(4);

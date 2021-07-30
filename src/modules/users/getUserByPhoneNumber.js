@@ -1,7 +1,7 @@
 /** @format */
 const Joi = require("joi");
 
-const userModel = require("./model");
+const userModel = require("./models/model");
 
 // Flow of Controller
 // 1. Validate the input
@@ -10,7 +10,7 @@ const userModel = require("./model");
 const getUserByPhoneNumber = async (req, res) => {
   // create schema object
   const schema = Joi.object({
-    phoneNumber: Joi.string().required(),
+    phoneNumber: Joi.string().length(10).required(),
   });
 
   // schema options

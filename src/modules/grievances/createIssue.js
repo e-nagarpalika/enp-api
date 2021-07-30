@@ -12,6 +12,7 @@ const createIssue = async (req, res) => {
     location: Joi.string().required(),
     category: Joi.string().required(),
     images: Joi.array().items(Joi.string().uri()).required(),
+    coordinates: Joi.array().items(Joi.number()).length(2).required(),
   });
 
   // schema options
@@ -23,7 +24,7 @@ const createIssue = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var { title, description, images, location, category } =
+    var { title, description, images, location, category, coordinates } =
       await bodySchema.validateAsync(req.body, options);
   } catch (validateError) {
     // console.log(validateError);
@@ -43,6 +44,10 @@ const createIssue = async (req, res) => {
       userId,
       location,
       category,
+      geoLocation: {
+        type: "Point",
+        coordinates,
+      },
     });
 
     var issue = await newIssue.save();

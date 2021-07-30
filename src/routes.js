@@ -29,6 +29,7 @@ const loginRoute = require("./modules/auth/login");
 const registerRoute = require("./modules/users/register");
 const updateAccountRoute = require("./modules/users/updateAccount");
 const updateUserTypeRoute = require("./modules/users/updateUserType");
+const validateAadharRoute = require("./modules/users/validateAadhar");
 
 /**
  * @swagger
@@ -78,6 +79,20 @@ router.put("/register", userMiddleware, registerRoute);
 
 /**
  * @swagger
+ * /api/users/validateAadhar:
+ *   post:
+ *     summary: validate aadhar number
+ *     description: validate aadhar number
+ *     tags:
+ *     - users
+ *     responses:
+ *       200:
+ *         true | false
+ */
+router.post("/users/validateAadhar", userMiddleware, validateAadharRoute);
+
+/**
+ * @swagger
  * /api/users/{userId}:
  *   put:
  *     summary: user account update
@@ -115,7 +130,7 @@ router.put("/users/:userId", updateAccountRoute);
  *       200:
  *         description: list of all the issues created by user with :userId
  */
-router.get("/users/:userId/issues", getUserIssuesRoute);
+router.get("/users/:userId/issues", userMiddleware, getUserIssuesRoute);
 
 /**
  * @swagger
