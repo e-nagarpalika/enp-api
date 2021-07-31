@@ -6,7 +6,7 @@ const { LOCATIONS, GRIEVANCE_STATUS } = require("../../utils/constants");
 
 const getHappinessLevel = async (req, res) => {
   // create schema object
-  const paramSchema = Joi.object({
+  const querySchema = Joi.object({
     location: Joi.string().valid(...Object.values(LOCATIONS)),
   });
 
@@ -19,7 +19,7 @@ const getHappinessLevel = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var { location } = await paramSchema.validateAsync(req.params, options);
+    var { location } = await querySchema.validateAsync(req.query, options);
   } catch (validateError) {
     // console.log(validateError);
 
@@ -32,7 +32,9 @@ const getHappinessLevel = async (req, res) => {
   try {
     // NOTE: var is used intentionally here.
     var [total, resolved] = await Promise.all([
-      IssueModel.countDocuments({ location }),
+      IssueModel.countDocuments({
+        location,
+      }),
       IssueModel.countDocuments({
         location,
         status: GRIEVANCE_STATUS.resolved,

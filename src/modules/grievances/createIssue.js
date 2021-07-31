@@ -68,6 +68,7 @@ const createIssue = async (req, res) => {
     data: {
       issue: {
         ...issue.toJSON(),
+        // eslint-disable-next-line no-underscore-dangle
         id: issue._id,
       },
     },
