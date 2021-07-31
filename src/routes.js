@@ -9,6 +9,7 @@ const {
   admin: adminMiddleware,
 } = require("./middlewares");
 
+const contactUsRoute = require("./modules/common/contactUs");
 const createAdminCommentRoute = require("./modules/grievances/createAdminComment");
 const createCommentRoute = require("./modules/grievances/createComment");
 const createIssueRoute = require("./modules/grievances/createIssue");
@@ -18,12 +19,12 @@ const getAdminCommentsRoute = require("./modules/grievances/getAdminComments");
 const getAdminIssueRoute = require("./modules/grievances/getAdminIssue");
 const getAdminIssuesRoute = require("./modules/grievances/getAdminIssues");
 const getCommentsRoute = require("./modules/grievances/getComments");
+const getIssueCountRoute = require("./modules/grievances/getIssueCount");
+const getIssueGraphByCategoryRoute = require("./modules/grievances/getIssueGraphByDate");
+const getIssueGraphByDateRoute = require("./modules/grievances/getIssueGraphByCategory");
 const getIssueRoute = require("./modules/grievances/getIssue");
 const getIssueStatsRoute = require("./modules/grievances/getIssueStats");
-const getIssueCountRoute = require("./modules/grievances/getIssueCount");
 const getIssueTypesRoute = require("./modules/grievances/getIssueTypes");
-const getIssueGraphByDateRoute = require("./modules/grievances/getIssueGraphByCategory");
-const getIssueGraphByCategoryRoute = require("./modules/grievances/getIssueGraphByDate");
 const getUserByPhoneNumberRoute = require("./modules/users/getUserByPhoneNumber");
 const getUserIssuesRoute = require("./modules/grievances/getUserIssues");
 const loginRoute = require("./modules/auth/login");
@@ -31,6 +32,30 @@ const registerRoute = require("./modules/users/register");
 const updateAccountRoute = require("./modules/users/updateAccount");
 const updateUserTypeRoute = require("./modules/users/updateUserType");
 const validateAadharRoute = require("./modules/users/validateAadhar");
+
+/**
+ * @swagger
+ * /api/contact-us:
+ *   post:
+ *     summary: contact developers regarding any bugs in code
+ *     description: contact developers regarding any bugs in code
+ *     tags:
+ *     - users
+ *     produces:
+ *     - application/json
+ *     consumes:
+ *     - application/json
+ *     parameters:
+ *     - token: Firebase Auth Token
+ *       description: Firebase Auth Token
+ *       in: String
+ *       required: true
+ *       type: String
+ *     responses:
+ *       200:
+ *         description: Signed In
+ */
+router.post("/contact-us", userMiddleware, contactUsRoute);
 
 /**
  * @swagger
