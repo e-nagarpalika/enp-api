@@ -32,6 +32,7 @@ const registerRoute = require("./modules/users/register");
 const updateAccountRoute = require("./modules/users/updateAccount");
 const updateUserTypeRoute = require("./modules/users/updateUserType");
 const validateAadharRoute = require("./modules/users/validateAadhar");
+const getHappinessLevelRoute = require("./modules/dashboard/getHappinessLevel");
 
 /**
  * @swagger
@@ -285,6 +286,21 @@ router.get("/issues/graphs/byDate", getIssueGraphByDateRoute);
  *         description:
  */
 router.get("/issues/graphs/byCategory", getIssueGraphByCategoryRoute);
+
+/**
+ * @swagger
+ * /api/dashboard/happiness-level:
+ *   get:
+ *     summary: get issue
+ *     description: get issue
+ *     tags:
+ *     - issues
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description: Signed In
+ */
+router.get("/dashboard/happiness-level", getHappinessLevelRoute);
 
 /**
  * @swagger

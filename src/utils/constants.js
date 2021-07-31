@@ -69,9 +69,9 @@ const GRIEVANCE_CATEGORIES = [
 
 const SORT_BY = {
   createdAt: "createdAt",
-  createdAt_desc: "createdAt_desc",
+  createdAtDesc: "createdAt_desc",
   updatedAt: "updatedAt",
-  updatedAt_desc: "updatedAt_desc",
+  updatedAtDesc: "updatedAt_desc",
 };
 
 module.exports = {

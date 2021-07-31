@@ -2,6 +2,7 @@
 const Joi = require("joi");
 
 const IssueModel = require("./models/issue");
+const { LOCATIONS } = require("../../utils/constants");
 
 const createIssue = async (req, res) => {
   const { id: userId } = req.auth;
@@ -9,7 +10,7 @@ const createIssue = async (req, res) => {
   const bodySchema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
-    location: Joi.string().required(),
+    location: Joi.string().valid(...Object.values(LOCATIONS)),
     category: Joi.string().required(),
     images: Joi.array().items(Joi.string().uri()).required(),
     coordinates: Joi.array().items(Joi.number()).length(2).required(),
@@ -67,6 +68,7 @@ const createIssue = async (req, res) => {
     data: {
       issue: {
         ...issue.toJSON(),
+        // eslint-disable-next-line no-underscore-dangle
         id: issue._id,
       },
     },
