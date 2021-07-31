@@ -10,7 +10,8 @@ const jwtVerify = util.promisify(jwt.verify);
 async function userAuthMiddleware(req, res, next) {
   const { authorization = "Bearer" } = req.headers;
 
-  const [_, token] = authorization.split(" ");
+  // eslint-disable-next-line no-unused-vars
+  const [Bearer, token] = authorization.split(" ");
 
   if (token) {
     try {

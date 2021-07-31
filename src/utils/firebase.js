@@ -8,6 +8,7 @@ const options = {};
 
 if (NODE_ENV === "development") {
   options.credential = admin.credential.cert(
+    // eslint-disable-next-line global-require
     require("../../data/serviceAccount.json"),
   );
 }

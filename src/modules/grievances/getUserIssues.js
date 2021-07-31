@@ -84,17 +84,18 @@ const getUserIssues = async (req, res) => {
     if (sortBy === SORT_BY.createdAt) {
       sort = { ...sort, createdAt: -1 };
     }
-    if (sortBy === SORT_BY.createdAt_desc) {
+    if (sortBy === SORT_BY.createdAtDesc) {
       sort = { ...sort, createdAt: 1 };
     }
     if (sortBy === SORT_BY.updatedAt) {
       sort = { ...sort, updatedAt: -1 };
     }
-    if (sortBy === SORT_BY.updatedAt_desc) {
+    if (sortBy === SORT_BY.updatedAtDesc) {
       sort = { ...sort, updatedAt: 1 };
     }
 
-    
+    query.sort(sort);
+
     // NOTE: var is used intentionally here.
     var issues = await query.lean();
   } catch (dbError) {

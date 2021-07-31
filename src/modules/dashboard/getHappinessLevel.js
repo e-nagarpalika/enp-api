@@ -1,13 +1,12 @@
 /** @format */
 const Joi = require("joi");
 
-const { LOCATIONS } = require("../../utils/constants");
-const IssueTypeModel = require("./models/issueType");
+const IssueModel = require("../grievances/models/issue");
+const { LOCATIONS, GRIEVANCE_STATUS } = require("../../utils/constants");
 
-const createIssueType = async (req, res) => {
+const getHappinessLevel = async (req, res) => {
   // create schema object
-  const schema = Joi.object().keys({
-    title: Joi.string().required(),
+  const paramSchema = Joi.object({
     location: Joi.string().valid(...Object.values(LOCATIONS)),
   });
 
@@ -15,12 +14,12 @@ const createIssueType = async (req, res) => {
   const options = {
     abortEarly: false, // include all errors
     allowUnknown: false, // ignore unknown props
-    stripUnknown: false, // remove unknown props
+    stripUnknown: true, // remove unknown props
   };
 
   try {
     // NOTE: var is used intentionally here.
-    var { title, location } = await schema.validateAsync(req.body, options);
+    var { location } = await paramSchema.validateAsync(req.params, options);
   } catch (validateError) {
     // console.log(validateError);
 
@@ -32,9 +31,13 @@ const createIssueType = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var newIssueType = IssueTypeModel({ title, location });
-
-    var issueType = await newIssueType.save();
+    var [total, resolved] = await Promise.all([
+      IssueModel.countDocuments({ location }),
+      IssueModel.countDocuments({
+        location,
+        status: GRIEVANCE_STATUS.resolved,
+      }),
+    ]);
   } catch (dbError) {
     // console.log(dbError);
 
@@ -47,12 +50,10 @@ const createIssueType = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      issueType: {
-        ...issueType.toJSON(),
-        id: issueType.id,
-      },
+      total,
+      resolved,
     },
   });
 };
 
-module.exports = createIssueType;
+module.exports = getHappinessLevel;
