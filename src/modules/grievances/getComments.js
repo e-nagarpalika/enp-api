@@ -5,7 +5,7 @@ const IssueCommentModel = require("./models/issueComment");
 
 const getComments = async (req, res) => {
   const paramsSchema = Joi.object({
-    issueId: Joi.string().required(),
+    issueId: Joi.string().limit(24).required(),
   });
 
   // schema options
@@ -29,7 +29,11 @@ const getComments = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var comments = await IssueCommentModel.find({ issueId });
+    const query = IssueCommentModel.find({ issueId }).sort({
+      createdAt: -1,
+    });
+
+    var comments = await query.lean();
 
     // console.log(comment);
   } catch (dbError) {
@@ -44,7 +48,10 @@ const getComments = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      comments,
+      comments: comments.map(({ _id, ...rest }) => ({
+        ...rest,
+        id: _id,
+      })),
     },
   });
 };
