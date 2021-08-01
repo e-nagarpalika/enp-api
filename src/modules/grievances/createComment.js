@@ -57,7 +57,11 @@ const createComment = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      comment,
+      comment: {
+        ...comment.toJSON(),
+        // eslint-disable-next-line no-underscore-dangle
+        id: comment._id,
+      },
     },
   });
 };

@@ -30,7 +30,7 @@ const getIssueCount = async (req, res) => {
     var { userId, location, category, status } =
       await querySchema.validateAsync(req.query, options);
   } catch (validateError) {
-    console.log(validateError);
+    // console.log(validateError);
 
     return res.json({
       status: "Error",

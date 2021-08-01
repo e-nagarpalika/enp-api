@@ -1,11 +1,12 @@
 /** @format */
 const Joi = require("joi");
 
-const IssueCommentModel = require("./models/issueComment");
+const IssueModel = require("./models/notification");
 
-const getComments = async (req, res) => {
-  const paramsSchema = Joi.object({
-    issueId: Joi.string().limit(24).required(),
+const getNotificationCount = async (req, res) => {
+  // create schema object
+  const paramSchema = Joi.object({
+    userId: Joi.string().length(24).required(),
   });
 
   // schema options
@@ -17,7 +18,7 @@ const getComments = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var { issueId } = await paramsSchema.validateAsync(req.params, options);
+    var { userId } = await paramSchema.validateAsync(req.params, options);
   } catch (validateError) {
     // console.log(validateError);
 
@@ -29,13 +30,10 @@ const getComments = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    const query = IssueCommentModel.find({ issueId }).sort({
-      createdAt: -1,
+    var count = await IssueModel.countDocuments({
+      userId,
     });
-
-    var comments = await query.lean();
-
-    // console.log(comment);
+    // console.log(count);
   } catch (dbError) {
     // console.log(dbError);
 
@@ -48,12 +46,9 @@ const getComments = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      comments: comments.map(({ _id, ...rest }) => ({
-        ...rest,
-        id: _id,
-      })),
+      count,
     },
   });
 };
 
-module.exports = getComments;
+module.exports = getNotificationCount;

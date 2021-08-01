@@ -1,11 +1,12 @@
 /** @format */
 const Joi = require("joi");
 
-const IssueCommentModel = require("./models/issueComment");
+const IssueModel = require("./models/notification");
 
-const getComments = async (req, res) => {
-  const paramsSchema = Joi.object({
-    issueId: Joi.string().limit(24).required(),
+const getUserIssues = async (req, res) => {
+  // create schema object
+  const paramSchema = Joi.object({
+    notificationId: Joi.string().length(24).required(),
   });
 
   // schema options
@@ -17,7 +18,10 @@ const getComments = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var { issueId } = await paramsSchema.validateAsync(req.params, options);
+    var { notificationId } = await paramSchema.validateAsync(
+      req.params,
+      options,
+    );
   } catch (validateError) {
     // console.log(validateError);
 
@@ -29,13 +33,13 @@ const getComments = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    const query = IssueCommentModel.find({ issueId }).sort({
-      createdAt: -1,
-    });
-
-    var comments = await query.lean();
-
-    // console.log(comment);
+    var notification = await IssueModel.findByIdAndUpdate(
+      notificationId,
+      {
+        isViewed: true,
+      },
+      { new: true },
+    );
   } catch (dbError) {
     // console.log(dbError);
 
@@ -48,12 +52,13 @@ const getComments = async (req, res) => {
   return res.json({
     status: "Success",
     data: {
-      comments: comments.map(({ _id, ...rest }) => ({
-        ...rest,
-        id: _id,
-      })),
+      notification: {
+        ...notification.toJSON(),
+        // eslint-disable-next-line no-underscore-dangle
+        id: notification._id,
+      },
     },
   });
 };
 
-module.exports = getComments;
+module.exports = getUserIssues;

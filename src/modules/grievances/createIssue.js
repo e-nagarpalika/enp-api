@@ -10,7 +10,9 @@ const createIssue = async (req, res) => {
   const bodySchema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
-    location: Joi.string().valid(...Object.values(LOCATIONS)),
+    location: Joi.string()
+      .valid(...Object.values(LOCATIONS))
+      .required(),
     category: Joi.string().required(),
     images: Joi.array().items(Joi.string().uri()).required(),
     coordinates: Joi.array().items(Joi.number()).length(2).required(),
