@@ -19,22 +19,23 @@ const getAdminCommentsRoute = require("./modules/grievances/getAdminComments");
 const getAdminIssueRoute = require("./modules/grievances/getAdminIssue");
 const getAdminIssuesRoute = require("./modules/grievances/getAdminIssues");
 const getCommentsRoute = require("./modules/grievances/getComments");
+const getHappinessLevelRoute = require("./modules/dashboard/getHappinessLevel");
 const getIssueCountRoute = require("./modules/grievances/getIssueCount");
 const getIssueGraphByCategoryRoute = require("./modules/grievances/getIssueGraphByDate");
 const getIssueGraphByDateRoute = require("./modules/grievances/getIssueGraphByCategory");
 const getIssueRoute = require("./modules/grievances/getIssue");
 const getIssueStatsRoute = require("./modules/grievances/getIssueStats");
 const getIssueTypesRoute = require("./modules/grievances/getIssueTypes");
+const getNotificationCountRoute = require("./modules/notifications/getNotificationCount");
+const getNotificationsRoute = require("./modules/notifications/getNotifications");
 const getUserByPhoneNumberRoute = require("./modules/users/getUserByPhoneNumber");
 const getUserIssuesRoute = require("./modules/grievances/getUserIssues");
-const getNotificationsRoute = require("./modules/notifications/getNotifications");
-const getNotificationCountRoute = require("./modules/notifications/getNotificationCount");
 const loginRoute = require("./modules/auth/login");
 const registerRoute = require("./modules/users/register");
 const updateAccountRoute = require("./modules/users/updateAccount");
+const updateIssueRoute = require("./modules/grievances/updateIssue");
 const updateUserTypeRoute = require("./modules/users/updateUserType");
 const validateAadharRoute = require("./modules/users/validateAadhar");
-const getHappinessLevelRoute = require("./modules/dashboard/getHappinessLevel");
 
 /**
  * @swagger
@@ -169,6 +170,7 @@ router.get("/users/:userId/issues", userMiddleware, getUserIssuesRoute);
  *     description: create new issue by USER
  *     tags:
  *     - users
+ *     - issues
  *     parameters:
  *     - token: JWT Token
  *       description: JWT Token
@@ -180,6 +182,26 @@ router.get("/users/:userId/issues", userMiddleware, getUserIssuesRoute);
  *         description:
  */
 router.post("/issues", userMiddleware, createIssueRoute);
+
+/**
+ * @swagger
+ * /api/issues/:issueId:
+ *   post:
+ *     summary: update issue
+ *     description: update issue
+ *     tags:
+ *     - issues
+ *     parameters:
+ *     - token: JWT Token
+ *       description: JWT Token
+ *       in: String
+ *       required: true
+ *       type: String
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.post("/issues/:issueId", userMiddleware, updateIssueRoute);
 
 /**
  * @swagger
