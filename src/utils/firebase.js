@@ -6,7 +6,7 @@ const { NODE_ENV } = process.env;
 
 const options = {};
 
-if (NODE_ENV === "development") {
+if (NODE_ENV === "local") {
   options.credential = admin.credential.cert(
     // eslint-disable-next-line global-require
     require("../../data/serviceAccount.json"),
