@@ -27,6 +27,8 @@ const getIssueStatsRoute = require("./modules/grievances/getIssueStats");
 const getIssueTypesRoute = require("./modules/grievances/getIssueTypes");
 const getUserByPhoneNumberRoute = require("./modules/users/getUserByPhoneNumber");
 const getUserIssuesRoute = require("./modules/grievances/getUserIssues");
+const getNotificationsRoute = require("./modules/notifications/getNotifications");
+const getNotificationCountRoute = require("./modules/notifications/getNotificationCount");
 const loginRoute = require("./modules/auth/login");
 const registerRoute = require("./modules/users/register");
 const updateAccountRoute = require("./modules/users/updateAccount");
@@ -316,6 +318,36 @@ router.get("/dashboard/happiness-level", getHappinessLevelRoute);
  *         description: Signed In
  */
 router.get("/issues/:issueId", getIssueRoute);
+
+/**
+ * @swagger
+ * /api/:userId/notificationCount:
+ *   get:
+ *     summary: get notification Count
+ *     description: get notification Count
+ *     tags:
+ *     - notifications
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.get("/:userId/notificationCount", getNotificationCountRoute);
+
+/**
+ * @swagger
+ * /api/:userId/notifications:
+ *   get:
+ *     summary: get notifications
+ *     description: get notifications
+ *     tags:
+ *     - notifications
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description:
+ */
+router.get("/:userId/notifications", getNotificationsRoute);
 
 /**
  * @swagger
