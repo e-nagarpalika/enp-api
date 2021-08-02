@@ -14,7 +14,7 @@ const issueSchema = new mongoose.Schema(
       ref: "issues",
       required: true,
     },
-    text: {
+    title: {
       type: String,
       required: true,
     },

@@ -185,6 +185,27 @@ router.post("/issues", userMiddleware, createIssueRoute);
 
 /**
  * @swagger
+ * /api/issues/:issueId/comments:
+ *   get:
+ *     summary: get all comments of issues
+ *     description: get all comments of issues
+ *     tags:
+ *     - users
+ *     - issues
+ *     parameters:
+ *     - token: JWT Token
+ *       description: JWT Token
+ *       in: String
+ *       required: true
+ *       type: String
+ *     responses:
+ *       200:
+ *         description: comments
+ */
+router.get("/issues/:issueId/comments", userMiddleware, getCommentsRoute);
+
+/**
+ * @swagger
  * /api/issues/:issueId:
  *   post:
  *     summary: update issue
@@ -223,27 +244,6 @@ router.post("/issues/:issueId", userMiddleware, updateIssueRoute);
  *         description: Signed In
  */
 router.post("/users/:userId/issues/:issueId/comments", createCommentRoute);
-
-/**
- * @swagger
- * /api/users/:userId/issues/:issueId/comments:
- *   get:
- *     summary: get all comments of issues
- *     description: get all comments of issues
- *     tags:
- *     - users
- *     - issues
- *     parameters:
- *     - token: JWT Token
- *       description: JWT Token
- *       in: String
- *       required: true
- *       type: String
- *     responses:
- *       200:
- *         description: Signed In
- */
-router.get("/users/:userId/issues/:issueId/comments", getCommentsRoute);
 
 /**
  * @swagger

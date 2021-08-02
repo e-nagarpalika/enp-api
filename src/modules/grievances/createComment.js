@@ -10,7 +10,7 @@ const createComment = async (req, res) => {
   });
 
   const bodySchema = Joi.object({
-    text: Joi.string().min(0).max(250).required(),
+    title: Joi.string().min(0).max(250).required(),
   });
 
   // schema options
@@ -22,11 +22,10 @@ const createComment = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var { userId, issueId } = await paramsSchema.validateAsync(
-      req.params,
-      options,
-    );
-    var { text } = await bodySchema.validateAsync(req.body, options);
+    var [{ userId, issueId }, { title }] = await Promise.all([
+      paramsSchema.validateAsync(req.params, options),
+      bodySchema.validateAsync(req.body, options),
+    ]);
   } catch (validateError) {
     // console.log(validateError);
 
@@ -41,7 +40,7 @@ const createComment = async (req, res) => {
     var newIssueComment = IssueCommentModel({
       userId,
       issueId,
-      text,
+      title,
     });
 
     var comment = await newIssueComment.save();

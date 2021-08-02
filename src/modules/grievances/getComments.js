@@ -5,7 +5,7 @@ const IssueCommentModel = require("./models/issueComment");
 
 const getComments = async (req, res) => {
   const paramsSchema = Joi.object({
-    issueId: Joi.string().limit(24).required(),
+    issueId: Joi.string().length(24).required(),
   });
 
   // schema options

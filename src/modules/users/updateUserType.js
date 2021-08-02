@@ -2,7 +2,7 @@
 const Joi = require("joi");
 
 const userModel = require("./models/model");
-const { ACCOUNT_TYPE, LOCATION } = require("../../utils/constants");
+const { ACCOUNT_TYPE, LOCATIONS } = require("../../utils/constants");
 
 const updateUserType = async (req, res) => {
   const schema = Joi.object({
@@ -11,7 +11,7 @@ const updateUserType = async (req, res) => {
       .valid(...Object.values(ACCOUNT_TYPE))
       .required(),
     location: Joi.string()
-      .valid(...Object.values(LOCATION))
+      .valid(...Object.values(LOCATIONS))
       .when("accountType", {
         is: ACCOUNT_TYPE.manager,
         then: Joi.required(),
@@ -32,7 +32,7 @@ const updateUserType = async (req, res) => {
       options,
     );
   } catch (validateError) {
-    console.log(validateError);
+    // console.log(validateError);
 
     return res.json({
       status: "Error",
