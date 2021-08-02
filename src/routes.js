@@ -207,7 +207,7 @@ router.get("/issues/:issueId/comments", userMiddleware, getCommentsRoute);
 /**
  * @swagger
  * /api/issues/:issueId:
- *   post:
+ *   put:
  *     summary: update issue
  *     description: update issue
  *     tags:
@@ -222,7 +222,7 @@ router.get("/issues/:issueId/comments", userMiddleware, getCommentsRoute);
  *       200:
  *         description:
  */
-router.post("/issues/:issueId", userMiddleware, updateIssueRoute);
+router.put("/issues/:issueId", userMiddleware, updateIssueRoute);
 
 /**
  * @swagger
