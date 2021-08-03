@@ -8,8 +8,8 @@ const createIssue = async (req, res) => {
   const { id: userId } = req.auth;
 
   const bodySchema = Joi.object({
-    title: Joi.string().required(),
-    description: Joi.string().required(),
+    title: Joi.string().length(200).required(),
+    description: Joi.string().length(500).required(),
     location: Joi.string()
       .valid(...Object.values(LOCATIONS))
       .required(),
