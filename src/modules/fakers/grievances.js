@@ -7,26 +7,34 @@ const Faker = require("faker");
 
 const { mongoose } = require("../../database/mongoDB");
 const {
-  LOCATIONS,
+  ACCOUNT_TYPE,
   GRIEVANCE_CATEGORIES,
   GRIEVANCE_STATUS,
+  LOCATIONS,
 } = require("../../utils/constants");
 const getRandomValueFromArray = require("../../utils/getRandomValueFromArray");
 
+const UserModel = require("../users/models/model");
 const IssueModel = require("../grievances/models/issue");
 
 async function createIssue({
-  userIds = [],
   createdAt = new Date().toISOString(),
-  count = 10,
+  count = 50,
 } = {}) {
+  const usersRes = await UserModel.find(
+    {
+      accountType: ACCOUNT_TYPE.user,
+    },
+    "_id",
+  );
+
+  const userList = usersRes.map(({ _id }) => _id);
+
+  // console.log(userList);
+
   for (let i = 0; i < count; i += 1) {
     const newIssue = IssueModel({
-      userId: getRandomValueFromArray([
-        // put userId here in array.
-        mongoose.Types.ObjectId("610414090340b90480b3a756"),
-      ]),
-      // userId: mongoose.Types.ObjectId(),
+      userId: getRandomValueFromArray(userList),
       title: Faker.lorem.sentence(),
       description: Faker.lorem.sentences(),
       images: [
