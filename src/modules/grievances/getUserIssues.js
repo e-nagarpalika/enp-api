@@ -97,7 +97,7 @@ const getUserIssues = async (req, res) => {
     query.sort(sort);
 
     // NOTE: var is used intentionally here.
-    var issues = await query.lean();
+    var issues = await query.limit(48).lean();
   } catch (dbError) {
     // console.log(dbError);
 

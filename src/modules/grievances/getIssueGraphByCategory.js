@@ -1,8 +1,8 @@
 /** @format */
-const Joi = require("joi");
+// const Joi = require("joi");
 
 const IssueModel = require("./models/issue");
-const { GRIEVANCE_STATUS } = require("../../utils/constants");
+// const { GRIEVANCE_STATUS } = require("../../utils/constants");
 
 // NOTE: work in progress
 const getIssueGraphByCategory = async (req, res) => {
@@ -10,27 +10,35 @@ const getIssueGraphByCategory = async (req, res) => {
     // NOTE: var is used intentionally here.
     var result = await IssueModel.aggregate([
       {
-        // $group: {
-        //   _id: {
-        //     // year: { $year: "$date" },
-        //     createdAt: { $month: "$date" },
-        //   },
-        //   results: { $push: "$$ROOT" },
-        // },
         $group: {
           _id: {
-            $dateToString: {
-              // format: "%Y-%m-%d",
-              date: "$createdAt",
+            month: {
+              $month: "$createdAt",
+            },
+            year: {
+              $year: "$createdAt",
             },
           },
-          results: { $push: "$$ROOT" },
+          numberofdocuments: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $project: {
+          numberofdocuments: true,
+        },
+      },
+      {
+        $sort: {
+          "_id.year": 1,
+          "_id.month": 1,
         },
       },
     ]);
-    console.log(result);
+    // console.log(result);
   } catch (dbError) {
-    console.log(dbError);
+    // console.log(dbError);
 
     return res.json({
       status: "Error",

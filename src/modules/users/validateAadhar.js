@@ -29,7 +29,7 @@ const validateAadhar = async (req, res) => {
 
   try {
     // NOTE: var is used intentionally here.
-    var user = await UserModel.find({
+    var user = await UserModel.findOne({
       aadharNumber,
     });
   } catch (dbError) {
