@@ -8,6 +8,7 @@ const {
   GRIEVANCE_CATEGORIES,
   GRIEVANCE_STATUS,
   SORT_BY,
+  ACCOUNT_TYPE,
 } = require("../../utils/constants");
 
 const getUserIssues = async (req, res) => {
@@ -21,6 +22,7 @@ const getUserIssues = async (req, res) => {
     location: Joi.string().valid(...Object.values(LOCATIONS)),
     category: Joi.string().valid(...Object.values(GRIEVANCE_CATEGORIES)),
     status: Joi.string().valid(...Object.values(GRIEVANCE_STATUS)),
+    accountType: Joi.string().valid(...Object.values(ACCOUNT_TYPE)),
   })
     .min(0)
     .max(4);
@@ -35,7 +37,7 @@ const getUserIssues = async (req, res) => {
   try {
     // NOTE: var is used intentionally here.
     var { userId } = await paramSchema.validateAsync(req.params, options);
-    var { sortBy, location, category, status } =
+    var { sortBy, location, category, status, accountType } =
       await querySchema.validateAsync(req.query, options);
   } catch (validateError) {
     // console.log(validateError);
@@ -46,8 +48,16 @@ const getUserIssues = async (req, res) => {
     });
   }
 
-  let filterQuery = { userId };
+  let filterQuery = {};
   let sort = { createdAt: -1 };
+
+  if (typeof accountType !== "undefined") {
+    filterQuery = {
+      ...filterQuery,
+      userId,
+    };
+  }
+
   if (
     typeof location !== "undefined" &&
     Object.values(LOCATIONS).findIndex((l) => l === location) > -1
@@ -98,8 +108,10 @@ const getUserIssues = async (req, res) => {
 
     // NOTE: var is used intentionally here.
     var issues = await query.limit(48).lean();
+
+    console.log(issues);
   } catch (dbError) {
-    // console.log(dbError);
+    console.log(dbError);
 
     return res.json({
       status: "Error",

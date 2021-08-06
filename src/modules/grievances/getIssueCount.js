@@ -12,8 +12,8 @@ const getIssueCount = async (req, res) => {
   const querySchema = Joi.object({
     userId: Joi.string().alphanum().length(24),
     location: Joi.string().valid(...Object.values(LOCATIONS)),
-    category: Joi.string().valid(...Object.values(GRIEVANCE_CATEGORIES)),
-    status: Joi.string().valid(...Object.values(GRIEVANCE_STATUS)),
+    // category: Joi.string().valid(...Object.values(GRIEVANCE_CATEGORIES)),
+    // status: Joi.string().valid(...Object.values(GRIEVANCE_STATUS)),
   })
     .min(0)
     .max(4);
