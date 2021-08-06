@@ -1,76 +1,142 @@
+<!-- @format -->
+
 # N4-E-Nagarpalika-Backend
 
 `e-NagarPalika` app is created with the sole intention of helping people log, track and resolve their grievances effectively. For a detailed overview of our project please find the required artifacts in the [google drive](https://drive.google.com/drive/folders/1m65N-1Ti4YkbAydtNGISgpeh_c-oXefx).
 
 ---
+
 ## Requirements
 
-For development, you will only need Node.js and a node global package, installed in your environement.
+### Softwares and Tools
 
-### Node(14 and above)
-- #### Node installation on Windows
-
-  Just go on [official Node.js website](https://nodejs.org/) and download the installer.
-  Also, be sure to have `git` available in your PATH, `npm` might need it (You can find git [here](https://git-scm.com/)).
-
-- #### Node installation on Ubuntu
-
-  You can install nodejs and npm easily with apt install, just run the following commands.
-
-      $ sudo apt install nodejs
-      $ sudo apt install npm
-
-- #### Other Operating Systems
-  You can find more information about the installation on the [official Node.js website](https://nodejs.org/) and the [official NPM website](https://npmjs.org/).
-
-If the installation was successful, you should be able to run the following command.
-
-    $ node --version
-
-    $ npm --version
-
-If you need to update `npm`, you can make it using `npm`! Cool right? After running the following command, just open again the command line and be happy.
-
-    $ npm install npm -g
-
+- [Node.js (v14 and above)](https://nodejs.org)
+- [MongoDB](https://www.mongodb.com)
+- [Git](https://git-scm.com)
+- Any code editor
+- [Redis](https://redislabs.com)
+- [Docker](https://www.docker.com)
 
 ---
 
-## Install
+## Setup
 
-    $ git clone https://github.com/USERNAME/n4-e-nagarpalika-backend
+### Install
+
+    $ git clone https://github.com/pesto-students/n4-e-nagarpalika-backend-eta-4
     $ cd n4-e-nagarpalika-backend
     $ npm install
 
-## Configure app
+### Environment variable setup
 
-Create a `.env` file in the project root directory then  add the required params which you can get from `.env.sample`  file in the root diectory.
+Make a copy of `.env.sample` file and name it as `.env`, required values values for `.env` files are
 
-Create a data directory and add the firebase serviceAccount.json there
+```yaml
+AUTH_SECRET=jwtsecret123
+MONGODB_URI=mongodb://localhost:7000/e-nagarpalika
+NODE_ENV=local # local, development, production
+PORT=7001
+WEB_URI=http://localhost:7002
 
-## Running the project on dev for better debug
+MAILER_USERNAME=example@mail.com
+MAILER_PASSWORD=mailer_password
+```
 
-    $ npm run dev
+## Development
 
-## Running the project on prod
+### `npm install`
 
-    $ npm start
+Install Dependencies
 
-## Simple build for production
+### `npm run start`
 
-    $ npm build
+Start dev server
+
+#### `npm run test`
+
+Unit Testing
+
+#### `npm run cypress:open`
+
+E2E Testing
+
+#### `npm run lint`
+
+For testing code quality.
+
+**NOTE:** `npm run lint` will run first `prettier` and then `eslint`
+
+#### `npm run lint:fix`
+
+for fixing common code style by `prettier` and `eslint`
+
 ---
-###
-### Authentication 
-For better Authentication we are using both server jwt tokens and Firebase Auth tokens effectively.
+
+## CI/CD Configuration
+
+### Frontend
+
+**Github actions** are used for running **code style** testing, **unit testing**, code building and deploying to **firebase hosting**
+
+**NOTE**: Please refer to `.github` folder for `github actions` scripts.
+
+### Backend
+
+We are using **Google Cloud Run** integration with github to build **docker** image of backend using **Google Cloud Build** and deploy into **Google Cloud Run**.
 
 ---
 
-##Tech Stack
+## Live Demo
+
+[e-NagarPalika](https://enp.hbarve1.com)
+
+### Demo Accounts
+
+| Phone Number | OTP    | Account Type | Location | Name           |
+| ------------ | ------ | ------------ | -------- | -------------- |
+| 9876543210   | 112233 | SUPER ADMIN  | All      | Admin          |
+| 7008608810   | 310596 | MANAGER      | DELHI    | Delhi manager  |
+| 9668264016   | 310596 | MANAGER      | MUMBAI   | Mumbai manager |
+| 1122334455   | 123456 | USER         | DELHI    | Delhi user     |
+
+---
+
+# Tech Stack
+
 We are using the below tech stack.
-- Mongo For Database
-- Express for routing
-- GitHub Actions for CI/CD
-- Google cloud run for backend Deployment
-- Firebase for user Identity authentication and Serverside JWT token for authorization.
+
+| Technology                          | Usage                                                                                                                                   |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Node.js + Express.js                | For server setup and REST API building                                                                                                  |
+| MongoDB                             | For storing data                                                                                                                        |
+| Google Cloud                        | Servers are deployed in **Google Cloud Run** for providing better scalability and reducing cost.                                        |
+| Firebase                            | Firebase hosting for hosting frontend of web app, Firebase Auth for mobile number authentication and Firebase Storage for storing files |
+| Github                              | for code hosting                                                                                                                        |
+| Github Actions & Google Cloud Build | for CI/CD on Firebase Hosting & Google Cloud Run                                                                                        |
+| Jest                                | for Unit testing on frontend and backend                                                                                                |
+| Cypress                             | for E2E testing                                                                                                                         |
+| Auhorization                        | JWT auth token for securing backend APIs                                                                                                |
+| React.js                            | for UI development                                                                                                                      |
+| Redux.js                            | for frontend state management                                                                                                           |
+
 ---
+
+## Scope Cutting
+
+- [ ] Firebase Functions are configured but not implemented.
+- [ ] E2E Testing is configured but not covered for whole application.
+- [ ] Unit testing is configured with jest but tests are not written for all components in frontend and backend apis.
+- [ ] Notifications apis are present in server and UI is present in frontend but integration is not complete.
+- [ ] Grievance discussion section is not integrated with backend.
+- [ ] UX of Image upload in new grievance creation is very basic.
+- [ ] Resend OTP and timeout counter on sign in with firebase is not implemented.
+- [ ] Grievance status update by MANAGER/ADMIN is not done.
+- [ ] Graph of grievance by category is not implemented with backend.
+- [ ] Caching with redis is not implemented in backend.
+
+## Out of Scope
+
+- Aadhar number validation with government aadhar database.
+- Securely storing aadhar number.
+- Social media integration: In the current version we will be proceeding with mobile number authentication only. Google, Facebook and Other Social Media integrations will be released in upcoming releases.
+- Escalation of unresolved issues: In the current version we will be proceeding with the basic flow of registering the grievance and getting the resolution only.The grievance escalation feature will be a part of upcoming releases.
