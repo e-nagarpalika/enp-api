@@ -23,20 +23,20 @@ const updateIssue = async (req, res) => {
     status: Joi.string().valid(...Object.values(GRIEVANCE_STATUS)),
     category: Joi.string().valid(...Object.values(GRIEVANCE_CATEGORIES)),
     images: Joi.array().items(Joi.string().uri()),
-    // coordinates: Joi.array().items(Joi.number()).length(2),
+    coordinates: Joi.array().items(Joi.number()).length(2),
   });
 
   // schema options
   const options = {
     abortEarly: false, // include all errors
-    allowUnknown: true, // ignore unknown props
+    allowUnknown: false, // ignore unknown props
     stripUnknown: true, // remove unknown props
   };
 
   try {
     // NOTE: var is used intentionally here.
     var [{ issueId }, body] = await Promise.all([
-      paramSchema.validateAsync(req.param, options),
+      paramSchema.validateAsync(req.params, options),
       bodySchema.validateAsync(req.body, options),
     ]);
   } catch (validateError) {

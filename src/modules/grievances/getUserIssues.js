@@ -109,9 +109,9 @@ const getUserIssues = async (req, res) => {
     // NOTE: var is used intentionally here.
     var issues = await query.limit(48).lean();
 
-    console.log(issues);
+    // console.log(issues);
   } catch (dbError) {
-    console.log(dbError);
+    // console.log(dbError);
 
     return res.json({
       status: "Error",
