@@ -7,12 +7,16 @@ const { GRIEVANCE_STATUS, LOCATIONS } = require("../../utils/constants");
 
 // TODO: optimise reponse later
 const getIssueGraphByDate = async (req, res) => {
-  const { role } = req.auth;
+  const { role } = req.auth || {};
   const { userId, location } = req.query;
 
   let match = {};
 
-  if (typeof userId !== "undefined" && role === "USER") {
+  if (
+    typeof userId !== "undefined" &&
+    typeof role !== "undefined" &&
+    role === "USER"
+  ) {
     match = {
       ...match,
       userId: mongoose.Types.ObjectId(userId),
