@@ -294,7 +294,7 @@ router.get("/issues/count", userMiddleware, getIssueCountRoute);
  *       200:
  *         description:
  */
-router.get("/issues/graphs/byDate", userMiddleware, getIssueGraphByDateRoute);
+router.get("/issues/graphs/byDate", getIssueGraphByDateRoute);
 
 /**
  * @swagger
